@@ -26,10 +26,10 @@ typedef unsigned char mon_type;
 #define SHADOW 18
 #define NONE 19
 
-#define SPE 2
+#define SPE 2.0
 #define NVE 0.5
-#define NRM 1
-#define NEF 0
+#define NRM 1.0
+#define NEF 0.0
 
 float effectiveness(mon_type atk_type, mon_type* def_type);
 

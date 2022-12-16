@@ -36,12 +36,12 @@ float damageCalc(unsigned char level, unsigned char power,
 
     float ajusted_level = ((2*level)/5)+2;
 
-    float damage = (((ajusted_level*power*(atk/def))/50) + 2);
+    float damage = (((ajusted_level*power*(float)atk/(float)def)/50.0) + 2.0);
 
     if(multitarget) damage = damage*MULTIHITDIV;
     if(rollcrit()) damage = damage*CRITDAMAGE;
 
-    float rand_factor = random_num(85, 100)/100;
+    float rand_factor = (float)random_num(85, 100)/100.0;
     damage = damage * rand_factor;
     damage = damage * effectiveness(atk_type, def_type);
     if(atk_type == pokemon_type[0] || atk_type == pokemon_type[1]) damage = damage * STAB;
