@@ -1,3 +1,13 @@
+/* Command Line Pokemon Battle Game
+**
+** Copyright © 2022 Victoria Mermel
+**
+** This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+ */
+
 #include "dex.h"
 #include "pokemon.h"
 #include "types.h"
@@ -46,7 +56,7 @@ species squirtle = {
 
 species** getDex(void) {
 
-    species** all_pokemon;
+    species** all_pokemon = malloc(sizeof(species*)*151);
 
     all_pokemon[0] = &bulbasuar;
     all_pokemon[8] = &squirtle;

@@ -1,3 +1,13 @@
+/* Command Line Pokemon Battle Game
+**
+** Copyright © 2022 Victoria Mermel
+**
+** This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+ */
+
 #include "types.h"
 #include "pokemon.h"
 #include <stdio.h>
@@ -40,13 +50,12 @@ float effectiveness(mon_type atk_type, mon_type* def_type) {
     }
     float total = type1 * type2;
     effective_mult = total;
-    printf("%f\n",total);
     return total;
 }
 
 void print_effectiveness(pokemon* pokemon) {
     #ifdef DEBUG
-    printf("X%f\n", effective_mult);
+    printf("Effectiveness: X%f\n", effective_mult);
     #endif
 
     if(effective_mult >= SPE) {

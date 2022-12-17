@@ -1,3 +1,13 @@
+/* Command Line Pokemon Battle Game
+**
+** Copyright © 2022 Victoria Mermel
+**
+** This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+ */
+
 #include "pokemon.h"
 #include "dex.h"
 #include "damage.h"
@@ -6,6 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 
 struct battle_state initialize(pokemon* player, pokemon* opponent) {
@@ -25,8 +36,20 @@ struct battle_state initialize(pokemon* player, pokemon* opponent) {
 int main(int argc , char ** argv) {
 
     printf("\n");
-    printf("Welcome\n");
-    char command[255];
+    #ifndef SILENCE_DISCLAIMER
+    printf("Welcome\n\n");
+    printf("This program is free software: you can redistribute it and/or modify\n\
+it under the terms of the GNU General Public License as published by\n\
+the Free Software Foundation, either version 3 of the License, or\n\
+(at your option) any later version.\n\n\
+\
+This program is distributed in the hope that it will be useful,\n\
+but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+);
+    #endif
+
+//    char command[255];
 
     move tackle = {
     .type = NORMAL,
@@ -66,6 +89,7 @@ int main(int argc , char ** argv) {
 
     printf("bulba: %d\n", state.player_health);
     printf("turters: %d\n", state.opponent_health);
+    printf("\n");
 
     mon_type squirtleType[2];
     mon_type bulbaType[2];
@@ -75,6 +99,7 @@ int main(int argc , char ** argv) {
     make_move(&state, &tackle, true);
     print_effectiveness(&turters);
 
+    printf("\n");
     printf("bulba: %d\n", state.player_health);
     printf("turters: %d\n", state.opponent_health);
 
@@ -83,4 +108,6 @@ int main(int argc , char ** argv) {
 //        scanf("%s",command);
 //
 //    }
+
+    free(all_pokemon);
 }
