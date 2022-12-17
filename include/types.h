@@ -33,4 +33,7 @@ typedef unsigned char mon_type;
 
 float effectiveness(mon_type atk_type, mon_type* def_type);
 
+typedef struct pokemon pokemon;
+void print_effectiveness(pokemon* pokemon);
+
 #endif // TYPES_H_

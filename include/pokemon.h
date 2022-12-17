@@ -36,6 +36,7 @@ typedef struct move move;
 
 typedef struct pokemon {
     species* species;
+    char nickname[16];
     unsigned char level;
     struct stats* stats;
     move* move1;

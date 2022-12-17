@@ -46,5 +46,8 @@ float damageCalc(unsigned char level, unsigned char power,
     damage = damage * effectiveness(atk_type, def_type);
     if(atk_type == pokemon_type[0] || atk_type == pokemon_type[1]) damage = damage * STAB;
 
-    return damage;
+    if(damage == 0 && effectiveness(atk_type, def_type) != 0) {
+        return 1;
+    }
+    else return damage;
 }
