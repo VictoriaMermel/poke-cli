@@ -33,6 +33,30 @@ struct battle_state initialize(pokemon* player, pokemon* opponent) {
     return state;
 }
 
+int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* state, bool player) {
+
+    void *movevoid;
+    switch(selection) {
+        case 1 :
+            movevoid = pokemon->move1->func;
+            break;
+        case 2 :
+            movevoid = pokemon->move2->func;
+            break;
+        case 3 :
+            movevoid = pokemon->move3->func;
+            break;
+        case 4 :
+            movevoid = pokemon->move4->func;
+            break;
+        default:
+            return 1;
+    }
+    void (*movefunc)(struct battle_state*, bool) = (void (*)(struct battle_state*, bool))movevoid;
+    (movefunc)(state, player);
+    return 0;
+}
+
 int main(int argc , char ** argv) {
 
     printf("\n");
@@ -51,21 +75,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
 
 //    char command[255];
 
-    move tackle = {
-    .type = NORMAL,
-    .category = PHYSICAL,
-    .PP = 35,
-    .Power = 40,
-    .Accuracy = 100,
-    .contact = true,
-    .affected_by_protect = true,
-    .affected_by_magic_coat = false,
-    .affected_by_snatch  = false,
-    .affected_by_mirror_move = true,
-    .stat_change = 0,
-};
-
     species** all_pokemon = getDex();
+    move* all_moves = getMoves();
+    void (*tackle)(struct battle_state*,bool) = (void (*)(struct battle_state*,bool))all_moves[TACKLE].func;
 
     struct stats bulba_stats = { 105, 48, 48, 63, 63, 45 };
     struct stats turters_stats = { 104, 47, 63, 49, 62, 43 };
@@ -75,6 +87,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
     .nickname = "Bulba",
     .level = 50,
     .stats = &bulba_stats,
+    .move1 = &all_moves[TACKLE],
 };
 
     pokemon turters = {
@@ -82,21 +95,22 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
     .nickname = "Turters",
     .level = 50,
     .stats = &turters_stats,
-    .move1 = &tackle,
+    .move1 = &all_moves[TACKLE],
 };
 
     struct battle_state state = initialize(&bulba, &turters);
 
     printf("bulba: %d\n", state.player_health);
+    printf("%s\n\n", bulba.move1->name);
     printf("turters: %d\n", state.opponent_health);
+    printf("%s\n", turters.move1->name);
     printf("\n");
 
     mon_type squirtleType[2];
     mon_type bulbaType[2];
-
     printf("damage: %f\n", damageCalc(50, 40, bulba_stats.Attack, turters_stats.Defense, false, NORMAL, bulbaType, squirtleType));
 
-    make_move(&state, &tackle, true);
+    make_chosen_move(1, &bulba, &state, true);
     print_effectiveness(&turters);
 
     printf("\n");
@@ -110,4 +124,5 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
 //    }
 
     free(all_pokemon);
+    free(all_moves);
 }

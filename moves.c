@@ -13,8 +13,9 @@
 #include "damage.h"
 #include <stdbool.h>
 #include <math.h>
+#include <stdlib.h>
 
-void make_move(struct battle_state* state, move* move, bool player) {
+void make_generic_move(struct battle_state* state, struct move_data* move, bool player) {
 
     pokemon* attacker;
     pokemon* defender;
@@ -49,4 +50,17 @@ void make_move(struct battle_state* state, move* move, bool player) {
                         pokemon_types, def_type);
 
     *health = *health - (int)damage;
+}
+
+void tackle(struct battle_state* state, bool player) {
+    struct move_data tackle = { NORMAL,PHYSICAL,53,40,100,true,true,false,false,true,0 };
+    make_generic_move(state, &tackle, player);
+}
+
+move* getMoves(void) {
+    move* all_moves = malloc(sizeof(move)*200);
+    move tackle_str = { "tackle", &tackle };
+    all_moves[TACKLE] = tackle_str;
+
+    return all_moves;
 }
