@@ -17,4 +17,8 @@ float damageCalc(unsigned char level, unsigned char power,
 unsigned short atk, unsigned short def, bool multitarget,
 mon_type atk_type, mon_type pokemon_type[2], mon_type def_type[2]);
 
+void print_crit(void);
+
+int random_num(unsigned int lowest, unsigned int highest);
+
 #endif // DAMAGE_H_

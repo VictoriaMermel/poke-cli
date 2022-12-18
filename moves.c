@@ -15,7 +15,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-void make_generic_move(struct battle_state* state, struct move_data* move, bool player) {
+
+void make_generic_move(struct battle_state* state, struct move* move, bool player) {
 
     pokemon* attacker;
     pokemon* defender;
@@ -25,24 +26,24 @@ void make_generic_move(struct battle_state* state, struct move_data* move, bool 
     unsigned short def;
 
     if(player) {
-        attacker = state->player_pokemon;
-        defender = state->opponent_pokemon;
-        health = &state->opponent_health;
+        attacker = state->player_pokemon1->pokemon;
+        defender = state->opponent_pokemon1->pokemon;
+        health = &state->opponent_pokemon1->health;
     }
     else {
-        attacker = state->opponent_pokemon;
-        defender = state->player_pokemon;
-        health = &state->player_health;
+        attacker = state->opponent_pokemon1->pokemon;
+        defender = state->player_pokemon1->pokemon;
+        health = &state->player_pokemon1->health;
     }
 
     mon_type pokemon_types[2] = {attacker->species->type1, attacker->species->type2};
     mon_type def_type[2] = {defender->species->type1, defender->species->type2};
     if(move->category == PHYSICAL) {
         atk = attacker->stats->Attack;
-        def = defender->stats->Sp_Def;
+        def = defender->stats->Defense;
     }
     else {
-        atk = attacker->stats->Attack;
+        atk = attacker->stats->Sp_Atk;
         def = defender->stats->Sp_Def;
     }
 
@@ -52,15 +53,17 @@ void make_generic_move(struct battle_state* state, struct move_data* move, bool 
     *health = *health - (int)damage;
 }
 
-void tackle(struct battle_state* state, bool player) {
-    struct move_data tackle = { NORMAL,PHYSICAL,53,40,100,true,true,false,false,true,0 };
-    make_generic_move(state, &tackle, player);
+void damage_dealing(struct battle_state* state, move* tackle, bool player) {
+    make_generic_move(state, tackle, player);
 }
 
+struct move tackle = { "Tackle", &damage_dealing, NORMAL,PHYSICAL,53,40,100,true,true,false,false,true,0 };
+struct move pound = { "Pound", &damage_dealing, NORMAL,PHYSICAL,35,40,100,true,true,false,false,true,0 };
+
 move* getMoves(void) {
-    move* all_moves = malloc(sizeof(move)*200);
-    move tackle_str = { "tackle", &tackle };
-    all_moves[TACKLE] = tackle_str;
+    move* all_moves = malloc(sizeof(move)*201);
+    all_moves[TACKLE] = tackle;
+    all_moves[POUND] = pound;
 
     return all_moves;
 }

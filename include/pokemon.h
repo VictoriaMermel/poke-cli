@@ -56,13 +56,33 @@ typedef struct pokemon {
 
 } pokemon;
 
+struct pokemon_state {
+    short health;
+    signed char atk_stage;
+    signed char def_stage;
+    signed char spa_stage;
+    signed char spd_stage;
+    signed char speed;
+    pokemon* pokemon;
+    unsigned int move1_PP;
+    unsigned int move2_PP;
+    unsigned int move3_PP;
+    unsigned int move4_PP;
+};
+
 struct battle_state {
-    pokemon* player_pokemon;
-    pokemon* opponent_pokemon;
-    signed char player_stages;
-    signed char opponent_stages;
-    short player_health;
-    short opponent_health;
+    struct pokemon_state* player_pokemon1;
+    struct pokemon_state* player_pokemon2;
+    struct pokemon_state* player_pokemon3;
+    struct pokemon_state* player_pokemon4;
+    struct pokemon_state* player_pokemon5;
+    struct pokemon_state* player_pokemon6;
+    struct pokemon_state* opponent_pokemon1;
+    struct pokemon_state* opponent_pokemon2;
+    struct pokemon_state* opponent_pokemon3;
+    struct pokemon_state* opponent_pokemon4;
+    struct pokemon_state* opponent_pokemon5;
+    struct pokemon_state* opponent_pokemon6;
 };
 
 struct battle_state initialize(pokemon* player, pokemon* opponent);

@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+float critical;
+
 #define MULTIHITDIV 0.75
 #define STAB 1.25
 #define CRITDAMAGE 2
@@ -37,7 +39,9 @@ int random_num(unsigned int lowest, unsigned int highest) {
 }
 
 bool rollcrit(void) {
-    return random_num(0,15)/15;
+    bool out = random_num(0,15)/15;
+    critical = out;
+    return out;
 }
 
 float damageCalc(unsigned char level, unsigned char power,
@@ -60,4 +64,10 @@ float damageCalc(unsigned char level, unsigned char power,
         return 1;
     }
     else return damage;
+}
+
+void print_crit() {
+    if(critical) {
+        printf("Its a critical hit!");
+    }
 }

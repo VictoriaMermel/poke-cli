@@ -4,7 +4,7 @@
 # @Makefile
 # @version 0.1
 
-CFLAGS=-Iinclude -D DEBUG -D SILENCE_DISCLAIMER -g
+CFLAGS=-Iinclude -D DEBUG -D POSIX -D SILENCE_DISCLAIMER -g
 
 all: pokemon.x
 

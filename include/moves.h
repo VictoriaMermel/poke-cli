@@ -17,9 +17,12 @@
 #define SPECIAL 1
 #define PHYSICAL 2
 
+#define POUND 1
 #define TACKLE 33
 
-struct move_data {
+typedef struct move {
+    char name[64];
+    void* func;
     mon_type type;
     unsigned char category;
     unsigned char PP;
@@ -31,11 +34,6 @@ struct move_data {
     bool affected_by_snatch;
     bool affected_by_mirror_move;
     signed char stat_change;
-};
-
-typedef struct move {
-    char name[64];
-    void* func;
 } move;
 
 struct battle_state;
