@@ -34,6 +34,8 @@ typedef struct species {
     unsigned char Sp_Atk;
     unsigned char Sp_Def;
     unsigned char Speed;
+    unsigned short evolution_num;
+    unsigned int evolution_level;
 } species;
 
 struct stats {
