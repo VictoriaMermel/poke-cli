@@ -19,6 +19,8 @@
 
 #define POUND 1
 #define TACKLE 33
+#define VINE_WHIP 22
+#define SWORDS_DANCE 14
 
 typedef struct move {
     char name[64];
@@ -33,11 +35,20 @@ typedef struct move {
     bool affected_by_magic_coat;
     bool affected_by_snatch;
     bool affected_by_mirror_move;
-    signed char stat_change;
+    signed char atk_change;
+    signed char opponent_atk_change;
+    signed char def_change;
+    signed char opponent_def_change;
+    signed char spa_change;
+    signed char opponent_spa_change;
+    signed char spd_change;
+    signed char opponent_spd_change;
+    signed char spe_change;
+    signed char opponent_spe_change;
 } move;
 
 struct battle_state;
 
-move* getMoves(void);
+move** getMoves(void);
 
 #endif // MOVES_H_

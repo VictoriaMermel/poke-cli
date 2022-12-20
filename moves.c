@@ -14,7 +14,68 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
+#ifdef NT
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
+void stat_change(pokemon* pokemon, signed char* stage, signed char change, char* stat) {
+    char rise[16];
+    char sharp[16];
+    if(*stage >= 6) {
+        printf("%s's %s won't go any higher\n", pokemon->nickname, stat);
+        sleep(1);
+    }
+    else if(*stage <= -6) {
+        printf("%s's %s won't go any lower\n", pokemon->nickname, stat);
+        sleep(1);
+    }
+    else {
+        if (change != 0) {
+            *stage = *stage + change;
+            if (change > 1 || change < -1) strcpy(sharp, "sharply ");
+            if (change > 0) strcpy(rise, "rose");
+            else strcpy(rise, "fell");
+
+            printf("%s's %s %s%s\n", pokemon->nickname, stat, sharp, rise);
+            sleep(1);
+        }
+    }
+}
+
+float get_Effective_stat(signed char stage) {
+    float atk_mod;
+
+        switch (stage) {
+            case 0 :
+                atk_mod = 1;
+            case 1 :
+                atk_mod = 3/2;
+            case 4 :
+                atk_mod = 6/2;
+            case 5 :
+                atk_mod = 8/2;
+            case -1 :
+                atk_mod = 2/3;
+            case -2 :
+                atk_mod = 2/4;
+            case -3 :
+                atk_mod = 2/5;
+            case -4 :
+                atk_mod = 2/6;
+            case -5 :
+                atk_mod = 2/7;
+            case -6 :
+                atk_mod = 2/8;
+            default:
+                atk_mod = 1;
+        }
+        return atk_mod;
+}
 
 void make_generic_move(struct battle_state* state, struct move* move, bool player) {
 
@@ -24,6 +85,10 @@ void make_generic_move(struct battle_state* state, struct move* move, bool playe
     float damage;
     unsigned short atk;
     unsigned short def;
+    float atk_mod;
+    float def_mod;
+
+    sleep(2);
 
     if(player) {
         attacker = state->player_pokemon1->pokemon;
@@ -39,16 +104,35 @@ void make_generic_move(struct battle_state* state, struct move* move, bool playe
     mon_type pokemon_types[2] = {attacker->species->type1, attacker->species->type2};
     mon_type def_type[2] = {defender->species->type1, defender->species->type2};
     if(move->category == PHYSICAL) {
-        atk = attacker->stats->Attack;
-        def = defender->stats->Defense;
+        atk = attacker->stats->Attack * get_Effective_stat(attacker->status->atk_stage);
+        def = defender->stats->Defense * get_Effective_stat(attacker->status->def_stage);
     }
     else {
-        atk = attacker->stats->Sp_Atk;
-        def = defender->stats->Sp_Def;
+        atk = attacker->stats->Sp_Atk * get_Effective_stat(attacker->status->spa_stage);
+        def = defender->stats->Sp_Def * get_Effective_stat(attacker->status->spd_stage);
     }
 
-    damage = damageCalc(attacker->level, move->Power, atk, defender->stats->Defense, false, move->type,
+    stat_change(attacker, &attacker->status->atk_stage, move->atk_change, "Attack");
+    stat_change(attacker, &attacker->status->def_stage, move->def_change, "Defense");
+    stat_change(attacker, &attacker->status->spa_stage, move->spa_change, "Special Attack");
+    stat_change(attacker, &attacker->status->spd_stage, move->spd_change, "Special Defense");
+    stat_change(attacker, &attacker->status->spe_stage, move->spe_change, "Speed");
+
+    stat_change(defender, &defender->status->atk_stage, move->opponent_atk_change, "Attack");
+    stat_change(defender, &defender->status->def_stage, move->opponent_def_change, "Defense");
+    stat_change(defender, &defender->status->spa_stage, move->opponent_spa_change, "Special Attack");
+    stat_change(defender, &defender->status->spd_stage, move->opponent_spd_change, "Special Attack");
+    stat_change(defender, &defender->status->spe_stage, move->opponent_spe_change, "Speed");
+    if(move->category == STATUS) {
+        damage = 0;
+    }
+    else {
+        damage = damageCalc(attacker->level, move->Power, atk, defender->stats->Defense, false, move->type,
                         pokemon_types, def_type);
+
+        print_effectiveness(attacker);
+        print_crit();
+    }
 
     *health = *health - (int)damage;
 }
@@ -57,13 +141,17 @@ void damage_dealing(struct battle_state* state, move* tackle, bool player) {
     make_generic_move(state, tackle, player);
 }
 
-struct move tackle = { "Tackle", &damage_dealing, NORMAL,PHYSICAL,53,40,100,true,true,false,false,true,0 };
-struct move pound = { "Pound", &damage_dealing, NORMAL,PHYSICAL,35,40,100,true,true,false,false,true,0 };
+struct move tackle = { "Tackle", &damage_dealing, NORMAL,PHYSICAL,53,40,100,true,true,false,false,true};
+struct move pound = { "Pound", &damage_dealing, NORMAL,PHYSICAL,35,40,100,true,true,false,false,true };
+struct move vine_whip = { "Vine Whip", &damage_dealing, GRASS,PHYSICAL,25,45,100,true,true,false,false,true };
+struct move swords_dance = { "Swords Dance",&damage_dealing,NORMAL,STATUS,20,0,100,false,false,false,true,false, 2};
 
-move* getMoves(void) {
-    move* all_moves = malloc(sizeof(move)*201);
-    all_moves[TACKLE] = tackle;
-    all_moves[POUND] = pound;
+move** getMoves(void) {
+    move** all_moves = malloc(sizeof(move*)*201);
+    all_moves[TACKLE] = &tackle;
+    all_moves[POUND] = &pound;
+    all_moves[VINE_WHIP] = &vine_whip;
+    all_moves[SWORDS_DANCE] = &swords_dance;
 
     return all_moves;
 }

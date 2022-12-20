@@ -18,12 +18,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#ifdef NT
-#include <windows.h>
-#else
-#include <unistd.h>
-#endif
-
 struct pokemon_state player_pokemon1;
 struct pokemon_state player_pokemon2;
 struct pokemon_state player_pokemon3;
@@ -37,6 +31,78 @@ struct pokemon_state opponent_pokemon4;
 struct pokemon_state opponent_pokemon5;
 struct pokemon_state opponent_pokemon6;
 
+bool player_whited_out(struct battle_state* state) {
+
+    if((state->player_pokemon2 == 0 || state->player_pokemon2->fainted) && (state->player_pokemon3 == 0 || state->player_pokemon3->fainted) && (state->player_pokemon4 == 0 || state->player_pokemon4->fainted) && (state->player_pokemon5 == 0 || state->player_pokemon5->fainted) && (state->player_pokemon6 == 0 || state->player_pokemon6->fainted) ) {
+        return true;
+    }
+    else return false;
+}
+
+bool player_wins(struct battle_state* state) {
+    if((state->opponent_pokemon2 == 0 || state->opponent_pokemon2->fainted) && (state->opponent_pokemon3 == 0 || state->opponent_pokemon3->fainted) && (state->opponent_pokemon4 == 0 || state->opponent_pokemon4->fainted) && (state->opponent_pokemon5 == 0 || state->opponent_pokemon5->fainted) && (state->opponent_pokemon6 == 0 || state->opponent_pokemon6->fainted) ) {
+        return true;
+    }
+    else return false;
+}
+
+void speed_order(struct battle_state* state, pokemon** order) {
+
+    bool player_first;
+    if(state->player_pokemon1->pokemon->stats->Speed > state->opponent_pokemon1->pokemon->stats->Speed) {
+        order[0] = state->player_pokemon1->pokemon;
+        order[1] = state->opponent_pokemon1->pokemon;
+    }
+    else {
+        order[0] = state->opponent_pokemon1->pokemon;
+        order[1] = state->player_pokemon1->pokemon;
+    }
+}
+
+bool faint(pokemon* target) {
+
+    if(target->status->health <= 0) {
+        target->status->fainted = true;
+        printf("%s fainted", target->nickname);
+        return true;
+    }
+    else return false;
+}
+
+void switch_out(struct battle_state* state) {
+
+    int selection;
+    struct pokemon_state* placeholder;
+    printf("%s (1)\n", state->player_pokemon2->pokemon->nickname);
+    printf("%s (2)\n", state->player_pokemon3->pokemon->nickname);
+    printf("%s (3)\n", state->player_pokemon4->pokemon->nickname);
+    printf("%s (4)\n", state->player_pokemon5->pokemon->nickname);
+    printf("%s (5)\n", state->player_pokemon6->pokemon->nickname);
+
+    printf(">>");
+    scanf("%d", &selection);
+
+    placeholder = state->player_pokemon1;
+    switch (selection) {
+        case 1 :
+            state->player_pokemon1 = state->player_pokemon2;
+            state->player_pokemon2 = placeholder;
+        case 2 :
+            state->player_pokemon1 = state->player_pokemon3;
+            state->player_pokemon3 = placeholder;
+        case 3 :
+            state->player_pokemon1 = state->player_pokemon4;
+            state->player_pokemon4 = placeholder;
+        case 4 :
+            state->player_pokemon1 = state->player_pokemon5;
+            state->player_pokemon5 = placeholder;
+        case 5 :
+            state->player_pokemon1 = state->player_pokemon6;
+            state->player_pokemon6 = placeholder;
+
+    }
+    
+}
 
 struct battle_state initialize(pokemon* player, pokemon* opponent) {
 
@@ -54,43 +120,59 @@ struct battle_state initialize(pokemon* player, pokemon* opponent) {
     state.opponent_pokemon2 = &opponent_pokemon5;
     state.opponent_pokemon2 = &opponent_pokemon6;
     state.player_pokemon1->pokemon = player;
+    player->status = state.player_pokemon1;
+    opponent->status = state.opponent_pokemon1;
     state.opponent_pokemon1->pokemon = opponent;
 
     state.player_pokemon1->health = player->stats->HP;
     state.opponent_pokemon1->health = opponent->stats->HP;
+    state.player_pokemon1-> fainted = false;
+    state.opponent_pokemon1 -> fainted = false;
+
+    unsigned int PP[5];
+    state.player_pokemon1->PP[1] = player->move1->PP;
+    if(player->move2 > 0) state.player_pokemon1->PP[2] = player->move2->PP;
+    if(player->move3 > 0) state.player_pokemon1->PP[3] = player->move3->PP;
+    if(player->move4 > 0) state.player_pokemon1->PP[4] = player->move4->PP;
+    state.opponent_pokemon1->PP[1] = opponent->move1->PP;
+    if(opponent->move2 > 0) state.opponent_pokemon1->PP[2] = opponent->move2->PP;
+    if(opponent->move3 > 0) state.opponent_pokemon1->PP[3] = opponent->move3->PP;
+    if(opponent->move4 > 0) state.opponent_pokemon1->PP[4] = opponent->move4->PP;
 
     return state;
 }
 
-int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* state, bool player) {
+int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* state) {
 
     void *movevoid;
     move *move;
 
-    switch(selection) {
-        case 1 :
-            move = pokemon->move1;
-            break;
-        case 2 :
-            move = pokemon->move2;
-            break;
-        case 3 :
-            move= pokemon->move3;
-            break;
-        case 4 :
-            move= pokemon->move4;
-            break;
-        default:
-            return 1;
+    if(pokemon->player) {
+        switch(selection) {
+            case 1 :
+                move = pokemon->move1;
+                break;
+            case 2 :
+                move = pokemon->move2;
+                break;
+            case 3 :
+                move= pokemon->move3;
+                break;
+            case 4 :
+                move= pokemon->move4;
+                break;
+            default:
+                return 1;
+        }
+    }
+    else {
+        move = pokemon->move1;
     }
     movevoid = move->func;
     void (*movefunc)(struct battle_state*, struct move*, bool) = (void (*)(struct battle_state*, struct move*, bool))movevoid;
-    (movefunc)(state, move, player);
 
     printf("%s used %s\n\n", pokemon->nickname, move->name);
-    sleep(2);
-    print_effectiveness(pokemon);
-    print_crit();
+    (movefunc)(state, move, pokemon->player);
     printf("\n%s: %d\n", state->player_pokemon1->pokemon->nickname, state->player_pokemon1->health);
     printf("%s: %d\n\n", state->opponent_pokemon1->pokemon->nickname, state->opponent_pokemon1->health);
 
@@ -114,9 +196,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
     #endif
 
     int command;
+    pokemon* order[2];
+    int i;
 
     species** all_pokemon = getDex();
-    move* all_moves = getMoves();
+    move** all_moves = getMoves();
 
     struct stats bulba_stats = { 105, 48, 48, 63, 63, 45 };
     struct stats turters_stats = { 104, 47, 63, 49, 62, 43 };
@@ -125,44 +209,67 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
     .species = all_pokemon[0],
     .nickname = "Bulba",
     .level = 50,
+    .player = true,
     .stats = &bulba_stats,
-    .move1 = &all_moves[TACKLE],
+    .move1 = all_moves[TACKLE],
+    .move2 = all_moves[VINE_WHIP],
+    .move3 = all_moves[SWORDS_DANCE],
 };
 
     pokemon turters = {
     .species = all_pokemon[8],
     .nickname = "Turters",
     .level = 50,
+    .player = false,
     .stats = &turters_stats,
-    .move1 = &all_moves[TACKLE],
+    .move1 = all_moves[TACKLE],
 };
 
     struct battle_state state = initialize(&bulba, &turters);
     printf("\n%s: %d\n", state.player_pokemon1->pokemon->nickname, state.player_pokemon1->health);
     printf("%s: %d\n\n", state.opponent_pokemon1->pokemon->nickname, state.opponent_pokemon1->health);
 
-    for(;;) {
-        printf("%s (1)\n", state.player_pokemon1->pokemon->move1->name);
-        printf("%s (2)\n", state.player_pokemon1->pokemon->move2->name);
-        printf("%s (3)\n", state.player_pokemon1->pokemon->move3->name);
-        printf("%s (4)\n", state.player_pokemon1->pokemon->move4->name);
+    for(;;) {    // Rounds
+
+        printf("%s (1)\n%d\n", state.player_pokemon1->pokemon->move1->name,state.player_pokemon1->PP[1]);
+        printf("%s (2)\n%d\n", state.player_pokemon1->pokemon->move2->name,state.player_pokemon1->PP[2]);
+        printf("%s (3)\n%d\n", state.player_pokemon1->pokemon->move3->name,state.player_pokemon1->PP[3]);
+        printf("%s (4)\n%d\n", state.player_pokemon1->pokemon->move4->name,state.player_pokemon1->PP[4]);
         printf(">> ");
         scanf("%d",&command);
-        if(state.player_pokemon1->pokemon->stats->Speed >= state.opponent_pokemon1->pokemon->stats->Speed) {
-            make_chosen_move(command, state.player_pokemon1->pokemon, &state, true);
-            make_chosen_move(1, state.opponent_pokemon1->pokemon, &state, false);
+        if(state.player_pokemon1->PP[command] == 0) {
+            printf("PP depleted");
+            break;
         }
         else {
-            make_chosen_move(1, state.opponent_pokemon1->pokemon, &state, false);
-            make_chosen_move(command, state.player_pokemon1->pokemon, &state, true);
+            state.player_pokemon1->PP[command]--;
         }
-        if(state.player_pokemon1->health <= 0) {
-            printf("%s fainted", state.player_pokemon1->pokemon->nickname);
-            break;
+
+        speed_order(&state, order);
+
+        for(i = 0; i < SINGLES; i++) { // Each pokemon makes a move
+            make_chosen_move(command, order[0], &state);
+            if(faint(order[0])) break;
+            make_chosen_move(command, order[1], &state);
+            if(faint(order[1])) break;
         }
-        else if(state.opponent_pokemon1->health <= 0) {
-            printf("%s fainted", state.opponent_pokemon1->pokemon->nickname);
-            break;
+        if(state.player_pokemon1->fainted) {
+            if(player_whited_out(&state)) {
+                printf("You whited out");
+                break;
+            }
+            else {
+                switch_out(&state);
+            }
+        }
+        if(state.opponent_pokemon1->fainted) {
+            if(player_wins(&state)) {
+                printf("Victory");
+                break;
+            }
+            else {
+                exit(0);  // Opponent switched out
+            }
         }
     }
 

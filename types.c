@@ -12,6 +12,12 @@
 #include "pokemon.h"
 #include <stdio.h>
 
+#ifdef NT
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
 float effective_mult;
 
 float effectiveness(mon_type atk_type, mon_type* def_type) {
@@ -60,11 +66,14 @@ void print_effectiveness(pokemon* pokemon) {
 
     if(effective_mult >= SPE) {
         printf("Its Super Effective\n");
+        sleep(1);
     }
     else if (effective_mult < NRM && effective_mult > NEF) {
         printf("Its Not Very Effective\n");
+        sleep(1);
     }
     else if (effective_mult == NEF) {
         printf("It doesn't affect %s\n", pokemon->nickname);
+        sleep(2);
     }
 }

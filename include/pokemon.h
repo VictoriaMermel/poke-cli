@@ -13,6 +13,9 @@
 #include "types.h"
 #include <stdbool.h>
 
+#define SINGLES 2
+#define DOUBLES 4
+
 typedef struct species {
     char name[16];
     char description[32];
@@ -49,6 +52,8 @@ typedef struct pokemon {
     char nickname[16];
     unsigned char level;
     struct stats* stats;
+    struct pokemon_state* status;
+    bool player;
     move* move1;
     move* move2;
     move* move3;
@@ -58,16 +63,14 @@ typedef struct pokemon {
 
 struct pokemon_state {
     short health;
+    bool fainted;
     signed char atk_stage;
     signed char def_stage;
     signed char spa_stage;
     signed char spd_stage;
-    signed char speed;
+    signed char spe_stage;
     pokemon* pokemon;
-    unsigned int move1_PP;
-    unsigned int move2_PP;
-    unsigned int move3_PP;
-    unsigned int move4_PP;
+    unsigned int PP[5];
 };
 
 struct battle_state {
