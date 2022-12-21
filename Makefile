@@ -8,8 +8,8 @@ CFLAGS=-Iinclude -D DEBUG -D POSIX -D SILENCE_DISCLAIMER -g
 
 all: pokemon.x
 
-pokemon.x: main.o damage.o moves.o types.o dex.o
-	@gcc $(CFLAGS) -o pokemon.x main.o damage.o moves.o types.o dex.o
+pokemon.x: main.o damage.o moves.o types.o dex.o ai.o
+	@gcc $(CFLAGS) -o pokemon.x main.o damage.o moves.o types.o dex.o ai.o
 
 main.o: main.c
 	@gcc $(CFLAGS) -c -o $@ $<
@@ -30,6 +30,10 @@ damage.o: damage.c
 dex.o: dex.c
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "dex.o"
+
+ai.o: ai.c
+	@gcc -c $(CFLAGS) -o $@ $<
+	@echo "ai.o"
 
 clean:
 	@rm *.o

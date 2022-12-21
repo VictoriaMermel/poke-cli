@@ -10,7 +10,7 @@
 
 #include "ai.h"
 #include "pokemon.h"
-#include "moves.c"
+#include "moves.h"
 #include "damage.h"
 
 void ai_faint(struct battle_state* state) {
@@ -24,9 +24,9 @@ void ai_faint(struct battle_state* state) {
 
 int move_selection(pokemon* pokemon, int skill) {
     int i = 4; // number_of_moves;
-    if(pokemon->move4 == NULL) i--;
-    if(pokemon->move3 == NULL) i--;
-    if(pokemon->move2 == NULL) i--;
+    if(pokemon->move4 == 0) i--;
+    if(pokemon->move3 == 0) i--;
+    if(pokemon->move2 == 0) i--;
 
     return random_num(1, i);
 }
