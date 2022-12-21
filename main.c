@@ -13,6 +13,7 @@
 #include "damage.h"
 #include "types.h"
 #include "moves.h"
+#include "ai.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -146,28 +147,32 @@ int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* stat
 
     void *movevoid;
     move *move;
+    int sel;  // Selection by either player or AI
 
     if(pokemon->player) {
-        switch(selection) {
-            case 1 :
-                move = pokemon->move1;
-                break;
-            case 2 :
-                move = pokemon->move2;
-                break;
-            case 3 :
-                move= pokemon->move3;
-                break;
-            case 4 :
-                move= pokemon->move4;
-                break;
-            default:
-                return 1;
-        }
+        sel = selection;
     }
     else {
-        move = pokemon->move1;
+        sel = move_selection(pokemon, 0);
     }
+
+    switch(selection) {
+        case 1 :
+            move = pokemon->move1;
+            break;
+        case 2 :
+            move = pokemon->move2;
+            break;
+        case 3 :
+            move= pokemon->move3;
+            break;
+        case 4 :
+            move= pokemon->move4;
+            break;
+        default:
+            return 1;
+    }
+
     movevoid = move->func;
     void (*movefunc)(struct battle_state*, struct move*, bool) = (void (*)(struct battle_state*, struct move*, bool))movevoid;
 
@@ -268,7 +273,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
                 break;
             }
             else {
-                exit(0);  // Opponent switched out
+                ai_faint(&state);  // Opponent switched out
             }
         }
     }

@@ -1,5 +1,7 @@
-#+title: Pokemon Battle
+#+title: PokéCLI
 #+author: Victoria Mermel
+
+* Command-line Pokémon Battle Simulator for Windows(?) and *nix. Currently in development.
 
 ** Resources
 *** Type Effectiveness Chart

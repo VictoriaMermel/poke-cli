@@ -1,0 +1,6 @@
+.idea
+*.log
+tmp/
+bin/
+*.o
+*.x
