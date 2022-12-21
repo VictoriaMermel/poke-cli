@@ -23,6 +23,7 @@ bool critical;
 #define CRITDAMAGE 2
 
 int random_num(unsigned int lowest, unsigned int highest) {
+    if (lowest == highest) return lowest;
     long* buf = malloc(sizeof(long));
     FILE* rand_src = fopen("/dev/urandom", "rb");
     if(rand_src) {
