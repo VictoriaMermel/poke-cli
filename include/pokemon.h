@@ -49,6 +49,10 @@ struct stats {
 
 typedef struct move move;
 
+
+// TODO: Add natures, IVs, EVs, Experience (eventually), friendship, and OT
+// TODO: Implement Hold Items and abilities
+
 typedef struct pokemon {
     species* species;
     char nickname[16];
@@ -62,6 +66,9 @@ typedef struct pokemon {
     move* move4;
 
 } pokemon;
+
+
+// TODO: Combine pokemon state and struct pokemon
 
 struct pokemon_state {
     short health;
