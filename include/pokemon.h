@@ -82,6 +82,8 @@ struct battle_state {
     struct pokemon_state* player_pokemon4;
     struct pokemon_state* player_pokemon5;
     struct pokemon_state* player_pokemon6;
+    unsigned char player_teamsize;
+    unsigned char opponent_teamsize;
     struct pokemon_state* opponent_pokemon1;
     struct pokemon_state* opponent_pokemon2;
     struct pokemon_state* opponent_pokemon3;

@@ -12,6 +12,7 @@
 #include "pokemon.h"
 #include "moves.h"
 #include "damage.h"
+#include <stdio.h>
 
 void ai_faint(struct battle_state* state) {
     state->opponent_pokemon1 = state->opponent_pokemon2;
@@ -20,6 +21,8 @@ void ai_faint(struct battle_state* state) {
     state->opponent_pokemon4 = state->opponent_pokemon5;
     state->opponent_pokemon5 = state->opponent_pokemon6;
     state->opponent_pokemon6 = 0;
+
+    printf("Opponent sent out %s\n", state->opponent_pokemon1->pokemon->nickname);
 }
 
 int move_selection(pokemon* pokemon, int skill) {
