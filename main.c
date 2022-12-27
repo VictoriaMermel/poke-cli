@@ -33,6 +33,13 @@ struct pokemon_state opponent_pokemon4;
 struct pokemon_state opponent_pokemon5;
 struct pokemon_state opponent_pokemon6;
 
+void healthbar(pokemon* pokemon, char** healthbar) {
+    int outoftwenty = ((float)pokemon->status->health / (float)pokemon->stats->HP) * 20;
+    memset(*healthbar, '-', 20);
+    memset(*healthbar, '*', outoftwenty);
+
+}
+
 bool player_whited_out(struct battle_state* state) {
 
     if(state->player_teamsize == 0) {
@@ -190,8 +197,6 @@ int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* stat
 
     printf("%s used %s\n\n", pokemon->nickname, move->name);
     (movefunc)(state, move, pokemon->player);
-    printf("\n%s: %d\n", state->player_pokemon1->pokemon->nickname, state->player_pokemon1->health);
-    printf("%s: %d\n\n", state->opponent_pokemon1->pokemon->nickname, state->opponent_pokemon1->health);
 
     return 0;
 }
@@ -245,8 +250,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
 };
 
     struct battle_state state = initialize(&bulba, &turters);    // Temporary. For beta version this fills each team with pokemon
-    printf("\n%s: %d\n", state.player_pokemon1->pokemon->nickname, state.player_pokemon1->health);
-    printf("%s: %d\n\n", state.opponent_pokemon1->pokemon->nickname, state.opponent_pokemon1->health);
+    char* health_bar = malloc(sizeof(char)*20);
+    char* opp_bar = malloc(sizeof(char)*20);
 
     for(;;) {    // Rounds
 
@@ -269,12 +274,19 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
         for(i = 0; i < SINGLES; i++) {                  // Each pokemon makes a move
             if(!faint(order[i])) {
                 make_chosen_move(command, order[i], &state);
+                healthbar(state.player_pokemon1->pokemon, &health_bar);
+                healthbar(state.opponent_pokemon1->pokemon, &opp_bar);
+                printf("\n%s: %d  [%s]\n", state.player_pokemon1->pokemon->nickname, state.player_pokemon1->health, health_bar);
+                printf("%s:  [%s]\n\n", state.opponent_pokemon1->pokemon->nickname, opp_bar);
             }
             if(faint(state.player_pokemon1->pokemon)) {
                 printf("%s fainted\n", state.player_pokemon1->pokemon->nickname);
                 state.player_teamsize--;
                 if(player_whited_out(&state)) {
                     printf("You whited out\n");
+                    free(all_moves);
+                    free(health_bar);
+                    free(opp_bar);
                     return 1;
                 }
                 else {
@@ -286,6 +298,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
                 state.opponent_teamsize--;
                 if(player_wins(&state)) {
                     printf("Victory\n");
+                    free(all_moves);
+                    free(health_bar);
+                    free(opp_bar);
                     return 0;
                 }
                 else {
