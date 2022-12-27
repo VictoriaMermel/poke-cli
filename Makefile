@@ -6,41 +6,45 @@
 
 CFLAGS=-Iinclude -D DEBUG -D POSIX -D SILENCE_DISCLAIMER -g
 
-all: pokemon.x
+all: pokemon.bin
 
-pokemon.x: main.o damage.o moves.o types.o dex.o ai.o ability.o
-	@gcc $(CFLAGS) -o pokemon.x main.o damage.o moves.o types.o dex.o ai.o ability.o
+pokemon.bin: build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o
+	@gcc $(CFLAGS) -o pokemon.bin build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o
 
-main.o: main.c
+build/main.o: main.c build
 	@gcc $(CFLAGS) -c -o $@ $<
 	@echo "main.o"
 
-moves.o: moves.c
+build/moves.o: moves.c build
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "moves.o"
 
-types.o: types.c
+build/types.o: types.c build
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "types.o"
 
-damage.o: damage.c
+build/damage.o: damage.c build
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "damage.o"
 
-dex.o: dex.c
+build/dex.o: dex.c build
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "dex.o"
 
-ai.o: ai.c
+build/ai.o: ai.c build
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "ai.o"
 
-ability.o: ability.c
+build/ability.o: ability.c build
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "ability.o"
 
+build:
+	@mkdir build
+
 clean:
-	@rm *.o
-	@rm pokemon.x
+	@rm build/*.o
+	@rm pokemon.bin
+	@rmdir build
 
 # end

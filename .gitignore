@@ -2,5 +2,5 @@
 *.log
 tmp/
 bin/
-*.o
-*.x
+build/
+*.bin
