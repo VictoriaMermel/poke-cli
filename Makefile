@@ -11,40 +11,36 @@ all: pokemon.bin
 pokemon.bin: build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o
 	@gcc $(CFLAGS) -o pokemon.bin build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o
 
-build/main.o: main.c build
+build/main.o: main.c
 	@gcc $(CFLAGS) -c -o $@ $<
 	@echo "main.o"
 
-build/moves.o: moves.c build
+build/moves.o: moves.c
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "moves.o"
 
-build/types.o: types.c build
+build/types.o: types.c
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "types.o"
 
-build/damage.o: damage.c build
+build/damage.o: damage.c
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "damage.o"
 
-build/dex.o: dex.c build
+build/dex.o: dex.c
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "dex.o"
 
-build/ai.o: ai.c build
+build/ai.o: ai.c
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "ai.o"
 
-build/ability.o: ability.c build
+build/ability.o: ability.c
 	@gcc -c $(CFLAGS) -o $@ $<
 	@echo "ability.o"
-
-build:
-	@mkdir build
 
 clean:
 	@rm build/*.o
 	@rm pokemon.bin
-	@rmdir build
 
 # end
