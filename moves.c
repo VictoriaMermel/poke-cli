@@ -11,6 +11,7 @@
 #include "moves.h"
 #include "pokemon.h"
 #include "damage.h"
+#include "ability.h"
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
@@ -127,6 +128,10 @@ void make_generic_move(struct battle_state* state, struct move* move, bool playe
         damage = 0;
     }
     else {
+        ability attacker_ability = attacker->ability;
+        if( attacker_ability == OVERGROW || attacker_ability == BLAZE || attacker_ability == SWARM || attacker_ability == TORRENT ) {
+            overgrow_like(move, attacker, &atk);
+        }
         damage = damageCalc(attacker->level, move->Power, atk, defender->stats->Defense, false, move->type,
                         pokemon_types, def_type);
 
@@ -145,6 +150,8 @@ struct move tackle = { "Tackle", &damage_dealing, NORMAL,PHYSICAL,53,40,100,true
 struct move pound = { "Pound", &damage_dealing, NORMAL,PHYSICAL,35,40,100,true,true,false,false,true };
 struct move vine_whip = { "Vine Whip", &damage_dealing, GRASS,PHYSICAL,25,45,100,true,true,false,false,true };
 struct move swords_dance = { "Swords Dance",&damage_dealing,NORMAL,STATUS,20,0,100,false,false,false,true,false, 2};
+struct move growl = { "Growl",&damage_dealing,NORMAL,STATUS,40,0,100,false,true,true,false,true,0,-1 };
+struct move tail_whip = { "Tail Whip",&damage_dealing,NORMAL,STATUS,30,0,100,false,true,true,false,true,0,0,0,-1 };
 
 move** getMoves(void) {
     move** all_moves = malloc(sizeof(move*)*201);
@@ -152,6 +159,8 @@ move** getMoves(void) {
     all_moves[POUND] = &pound;
     all_moves[VINE_WHIP] = &vine_whip;
     all_moves[SWORDS_DANCE] = &swords_dance;
+    all_moves[GROWL] = &growl;
+    all_moves[TAIL_WHIP] = &tail_whip;
 
     return all_moves;
 }

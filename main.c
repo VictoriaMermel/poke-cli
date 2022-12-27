@@ -14,6 +14,7 @@
 #include "types.h"
 #include "moves.h"
 #include "ai.h"
+#include "ability.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -227,9 +228,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
     .level = 50,
     .player = true,
     .stats = &bulba_stats,
+    .ability = OVERGROW,
     .move1 = all_moves[TACKLE],
-    .move2 = all_moves[VINE_WHIP],
-    .move3 = all_moves[SWORDS_DANCE],
+    .move2 = all_moves[GROWL],
 };
 
     pokemon turters = {
@@ -238,7 +239,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
     .level = 50,
     .player = false,
     .stats = &turters_stats,
+    .ability = TORRENT,
     .move1 = all_moves[TACKLE],
+    .move2 = all_moves[TAIL_WHIP],
 };
 
     struct battle_state state = initialize(&bulba, &turters);    // Temporary. For beta version this fills each team with pokemon

@@ -18,9 +18,11 @@
 #define PHYSICAL 2
 
 #define POUND 1
-#define TACKLE 33
-#define VINE_WHIP 22
 #define SWORDS_DANCE 14
+#define VINE_WHIP 22
+#define TACKLE 33
+#define TAIL_WHIP 39
+#define GROWL 45
 
 typedef struct move {
     char name[64];

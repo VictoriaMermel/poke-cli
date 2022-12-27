@@ -16,6 +16,8 @@
 #define SINGLES 2
 #define DOUBLES 4
 
+typedef unsigned int ability;
+
 typedef struct species {
     char name[16];
     char description[32];
@@ -36,6 +38,9 @@ typedef struct species {
     unsigned char Speed;
     unsigned short evolution_num;
     unsigned int evolution_level;
+    ability abilities[2];
+    unsigned int learnset[30][100];
+    unsigned int tms[];
 } species;
 
 struct stats {
@@ -59,6 +64,7 @@ typedef struct pokemon {
     unsigned char level;
     struct stats* stats;
     struct pokemon_state* status;
+    ability ability;
     bool player;
     move* move1;
     move* move2;
