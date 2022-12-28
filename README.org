@@ -1,7 +1,12 @@
 #+title: PokéCLI
 #+author: Victoria Mermel
 
-* Command-line Pokémon Battle Simulator for Windows(?) and *nix. Currently in development.
+* Command-line Pokémon Battle for Windows(?) and *nix.
+
+** Build
+#+BEGIN_SRC shell
+mkdir build && make
+#+END_SRC
 
 ** Resources
 *** Type Effectiveness Chart

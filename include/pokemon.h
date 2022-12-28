@@ -39,7 +39,7 @@ typedef struct species {
     unsigned short evolution_num;
     unsigned int evolution_level;
     ability abilities[2];
-    unsigned int learnset[30][100];
+    unsigned int learnset[30][2];
     unsigned int tms[];
 } species;
 
