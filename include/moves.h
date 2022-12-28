@@ -210,6 +210,6 @@ typedef struct move {
 
 struct battle_state;
 
-move** getMoves(void);
+move* getMove(int move);
 
 #endif // MOVES_H_

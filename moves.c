@@ -153,8 +153,10 @@ struct move swords_dance = { "Swords Dance",&damage_dealing,NORMAL,STATUS,20,0,1
 struct move growl = { "Growl",&damage_dealing,NORMAL,STATUS,40,0,100,false,true,true,false,true,0,-1 };
 struct move tail_whip = { "Tail Whip",&damage_dealing,NORMAL,STATUS,30,0,100,false,true,true,false,true,0,0,0,-1 };
 
-move** getMoves(void) {
-    move** all_moves = malloc(sizeof(move*)*201);
+
+move* getMove(int move) {
+
+    struct move* all_moves[200];
     all_moves[TACKLE] = &tackle;
     all_moves[POUND] = &pound;
     all_moves[VINE_WHIP] = &vine_whip;
@@ -162,5 +164,5 @@ move** getMoves(void) {
     all_moves[GROWL] = &growl;
     all_moves[TAIL_WHIP] = &tail_whip;
 
-    return all_moves;
+    return all_moves[move];
 }

@@ -18,7 +18,7 @@
 
 typedef unsigned int ability;
 
-typedef struct species {
+typedef const struct species {
     char name[16];
     char description[32];
     unsigned short pokedex;

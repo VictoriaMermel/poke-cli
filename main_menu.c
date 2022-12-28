@@ -94,8 +94,6 @@ void demo() {
     species bulbasaur;
     species squirtle;
 
-    move** all_moves = getMoves();
-
     struct stats bulba_stats = { 105, 48, 48, 63, 63, 45 };
     struct stats turters_stats = { 104, 47, 63, 49, 62, 43 };
 
@@ -105,8 +103,8 @@ void demo() {
     .player = true,
     .stats = &bulba_stats,
     .ability = OVERGROW,
-    .move1 = all_moves[TACKLE],
-    .move2 = all_moves[GROWL],
+    .move1 = getMove(TACKLE),
+    .move2 = getMove(GROWL),
 };
     bulba.species = &bulbasaur;
 
@@ -116,16 +114,14 @@ void demo() {
     .player = false,
     .stats = &turters_stats,
     .ability = TORRENT,
-    .move1 = all_moves[TACKLE],
-    .move2 = all_moves[TAIL_WHIP],
+    .move1 = getMove(TACKLE),
+    .move2 = getMove(TAIL_WHIP),
 };
     turters.species = &squirtle;
 
     struct battle_state state = initialize(&bulba, &turters);
 
     battle_main(&state);
-
-    free(all_moves);
 }
 
 int main(int argc, char** argv) {
