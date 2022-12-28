@@ -8,7 +8,6 @@
     (at your option) any later version.
  */
 
-#include "dex.h"
 #include "pokemon.h"
 #include "types.h"
 #include "ability.h"
@@ -473,34 +472,3 @@ false,
 "With its huge and magnificent wings, it can keep aloft without ever having to land for rest.",
 65,90,65,61,61,100,
 };
-
-species** getDex(void) {
-
-    static species* all_pokemon[151] = {
-    &bulbasuar,
-    &ivysaur,
-    &venusaur,
-    &charmander,
-    &charmeleon,
-    &charizard,
-    &squirtle,
-    &wartortle,
-    &blastoise,
-    &caterpie,
-    &metapod,
-    &caterpie,
-    &weedle,
-    &kakuna,
-    &beedrill,
-    &pidgey,
-    &pidgoetto,
-    &pidgeot,
-    &rattata,
-    &raticate,
-    &spearow,
-    &fearow,
-
-};
-
-    return all_pokemon;
-}

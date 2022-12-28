@@ -9,7 +9,6 @@
  */
 
 #include "pokemon.h"
-#include "dex.h"
 #include "damage.h"
 #include "types.h"
 #include "moves.h"

@@ -14,7 +14,6 @@
 #include "factory.h"
 #include "pokemon.h"
 #include "moves.h"
-#include "dex.h"
 #include "ability.h"
 
 bool battle_mode_menu() {
@@ -92,14 +91,15 @@ struct battle_state initialize(pokemon* player, pokemon* opponent) {
 
 void demo() {
 
-    species** all_pokemon = getDex();
+    species bulbasaur;
+    species squirtle;
+
     move** all_moves = getMoves();
 
     struct stats bulba_stats = { 105, 48, 48, 63, 63, 45 };
     struct stats turters_stats = { 104, 47, 63, 49, 62, 43 };
 
     pokemon bulba = {
-    .species = all_pokemon[0],
     .nickname = "Bulba",
     .level = 50,
     .player = true,
@@ -108,9 +108,9 @@ void demo() {
     .move1 = all_moves[TACKLE],
     .move2 = all_moves[GROWL],
 };
+    bulba.species = &bulbasaur;
 
     pokemon turters = {
-    .species = all_pokemon[8],
     .nickname = "Turters",
     .level = 50,
     .player = false,
@@ -119,6 +119,8 @@ void demo() {
     .move1 = all_moves[TACKLE],
     .move2 = all_moves[TAIL_WHIP],
 };
+    turters.species = &squirtle;
+
     struct battle_state state = initialize(&bulba, &turters);
 
     battle_main(&state);
