@@ -105,7 +105,7 @@ struct battle_state {
     struct pokemon_state* opponent_pokemon6;
 };
 
-struct battle_state initialize(pokemon* player, pokemon* opponent);
+int battle_main(struct battle_state* state);
 
 
 #endif // POKEMON_H_
