@@ -6,10 +6,10 @@
 
 CFLAGS=-Iinclude -D DEBUG -D POSIX -D SILENCE_DISCLAIMER -g
 
-all: pokemon.bin
+all: poke-cli.bin
 
-pokemon.bin: build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o build/factory.o build/battle.o
-	@gcc $(CFLAGS) -o pokemon.bin build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o build/factory.o build/battle.o
+poke-cli.bin: build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o build/factory.o build/battle.o
+	@gcc $(CFLAGS) -o poke-cli.bin build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o build/factory.o build/battle.o
 
 build/main.o: main_menu.c
 	@gcc $(CFLAGS) -c -o $@ $<
@@ -49,6 +49,12 @@ build/battle.o: main.c
 
 clean:
 	@rm build/*.o
-	@rm pokemon.bin
+	@rm poke-cli.bin
+
+install: poke-cli.bin
+	@sudo cp poke-cli.bin /usr/local/bin/poke-cli
+
+uninstall:
+	@sudo rm /usr/local/bin/poke-cli
 
 # end
