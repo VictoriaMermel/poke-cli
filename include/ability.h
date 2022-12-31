@@ -19,7 +19,7 @@ typedef unsigned int ability;
 #define SWARM 4
 
 typedef struct pokemon pokemon;
-typedef struct move move;
+typedef const struct move move;
 
 void overgrow_like( move* move, pokemon* pokemon, unsigned short* atk );
 

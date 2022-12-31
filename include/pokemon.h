@@ -17,6 +17,12 @@
 #define DOUBLES 4
 
 typedef unsigned int ability;
+typedef const struct move move;
+
+struct by_lu {
+    int level;
+    move* move;
+};
 
 typedef const struct species {
     char name[16];
@@ -39,7 +45,7 @@ typedef const struct species {
     unsigned short evolution_num;
     unsigned int evolution_level;
     ability abilities[2];
-    unsigned int learnset[30][2];
+    unsigned int learnset[30];
     unsigned int tms[];
 } species;
 
@@ -52,7 +58,7 @@ struct stats {
     unsigned short Speed;
 };
 
-typedef struct move move;
+typedef const struct move move;
 
 
 // TODO: Add natures, IVs, EVs, Experience (eventually), friendship, and OT

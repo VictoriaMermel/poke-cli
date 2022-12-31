@@ -16,6 +16,10 @@
 #include "moves.h"
 #include "ability.h"
 
+
+extern species bulbasaur;
+extern species squirtle;
+
 bool battle_mode_menu() {
 
     printf("(1) Battle Factory   ('!' for rules)\n");
@@ -91,9 +95,6 @@ struct battle_state initialize(pokemon* player, pokemon* opponent) {
 
 void demo() {
 
-    species bulbasaur;
-    species squirtle;
-
     struct stats bulba_stats = { 105, 48, 48, 63, 63, 45 };
     struct stats turters_stats = { 104, 47, 63, 49, 62, 43 };
 
@@ -103,8 +104,8 @@ void demo() {
     .player = true,
     .stats = &bulba_stats,
     .ability = OVERGROW,
-    .move1 = getMove(TACKLE),
-    .move2 = getMove(GROWL),
+    .move1 = &tackle,
+    .move2 = &growl,
 };
     bulba.species = &bulbasaur;
 
@@ -114,8 +115,8 @@ void demo() {
     .player = false,
     .stats = &turters_stats,
     .ability = TORRENT,
-    .move1 = getMove(TACKLE),
-    .move2 = getMove(TAIL_WHIP),
+    .move1 = &tackle,
+    .move2 = &tail_whip,
 };
     turters.species = &squirtle;
 

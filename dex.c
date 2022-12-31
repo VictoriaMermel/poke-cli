@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-species bulbasuar = {
+species bulbasaur = {
 .name = "bulbasuar",
 .description = "Seed Pokémon",
 .pokedex = 1,
@@ -36,18 +36,6 @@ species bulbasuar = {
 .evolution_num = 2,
 .evolution_level = 16,
 .abilities = {OVERGROW},
-.learnset = {
-{1,GROWL},
-{1,TACKLE},
-{3,VINE_WHIP},
-{6,GROWTH},
-{9,LEECH_SEED},
-{12,RAZOR_LEAF},
-{15,POISON_POWDER},
-{15,SLEEP_POWDER},
-{21,TAKE_DOWN},
-{33,DOUBLE_EDGE},
-{36,SOLAR_BEAM},},
 };
 
 species ivysaur = {

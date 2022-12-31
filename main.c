@@ -138,7 +138,7 @@ int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* stat
     }
 
     movevoid = move->func;
-    void (*movefunc)(struct battle_state*, struct move*, bool) = (void (*)(struct battle_state*, struct move*, bool))movevoid;
+    void (*movefunc)(struct battle_state*, const struct move*, bool) = (void (*)(struct battle_state*, const struct move*, bool))movevoid;
 
     printf("%s used %s\n\n", pokemon->nickname, move->name);
     (movefunc)(state, move, pokemon->player);
