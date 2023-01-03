@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "factory.h"
 #include "pokemon.h"
 #include "moves.h"
@@ -22,19 +23,20 @@ extern species squirtle;
 
 bool battle_mode_menu() {
 
+    char input[8];
     printf("(1) Battle Factory   ('!' for rules)\n");
+prompt:
     printf("\n>> ");
-    int input;
-    scanf("%d", &input);
-    switch(input) {
-        case 1 :
-            factory_main();
-        /* case '!' : */
-        /*     printf("Battle With Rental Pokemon"); */
-        /* case 'q' : */
-        /*     return true; */
-        default :
-            return false;
+    scanf("%s", input);
+    if (strcmp(input, "1") == 0) {
+        factory_main();
+        goto prompt;
+    }
+    else if (strcmp(input, "!") == 0) { printf("Battle With Rental Pokemon\n"); goto prompt; }
+    else if (strcmp(input, "q") == 0) return true;
+    else {
+        printf("Error: not a valid input");
+        goto prompt;
     }
 }
 
@@ -141,19 +143,26 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
 );
     #endif
 
-    printf("(1) Demo\n");
-    printf("(2) Battle Mode\n");
-    printf("\n>> ");
-    int input;
+    char input[8];
     bool back = true;
-    scanf("%d", &input);
     while (back) {
-        switch (input) {
-            case 1 :
-                demo();
-                back = false;
-            case 2 :
-                back = battle_mode_menu();
+        printf("(1) Demo\n");
+        printf("(2) Battle Mode\n");
+        printf("\n Type 'quit' to exit\n");
+        printf("\n>> ");
+        scanf("%s", input);
+        if(strcmp(input, "1") == 0) {
+            demo();
+            back = false;
+        }
+        else if (strcmp(input, "2") == 0) {
+            back = battle_mode_menu();
+        }
+        else if (strcmp(input, "quit") == 0) {
+            return 0;
+        }
+        else {
+            printf("Error: not a valid input");
         }
     }
 }
