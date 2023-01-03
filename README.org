@@ -1,25 +1,25 @@
 #+title: PokéCLI
 #+author: Victoria Mermel
 
-* Command-line Pokémon Battle for Windows(?) and *nix.
+** Command-line Pokémon Battle for Windows(?) and *nix.
 
-** Build
+*** Build
 #+BEGIN_SRC shell
 mkdir build && make
 #+END_SRC
 
-** Resources
-*** Type Effectiveness Chart
+*** Resources
+**** Type Effectiveness Chart
 
 [[./resources/effectiveness.png]]
 Credit: Bulbapedia
 
-*** Damage Calculation
+**** Damage Calculation
 
 [[./resources/damage_calc.svg]]
 Credit: Bulbapedia
 
-* Credits
+** Credits
 
 Resources from Bulbapedia are used under terms of Attribution-NonCommercial-ShareAlike 2.5 Generic (CC BY-NC-SA 2.5)
 https://creativecommons.org/licenses/by-nc-sa/2.5/
