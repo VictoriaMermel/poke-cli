@@ -26,7 +26,7 @@
 
 void stat_change(pokemon* pokemon, signed char* stage, signed char change, char* stat) {
     char rise[16];
-    char sharp[16];
+    bool sharp;
     if(*stage >= 6) {
         printf("%s's %s won't go any higher\n", pokemon->nickname, stat);
         sleep(1);
@@ -38,11 +38,12 @@ void stat_change(pokemon* pokemon, signed char* stage, signed char change, char*
     else {
         if (change != 0) {
             *stage = *stage + change;
-            if (change > 1 || change < -1) strcpy(sharp, "sharply ");
+            if (change > 1 || change < -1) sharp = true;
             if (change > 0) strcpy(rise, "rose");
             else strcpy(rise, "fell");
 
-            printf("%s's %s %s%s\n", pokemon->nickname, stat, sharp, rise);
+            if (sharp) printf("%s's %s sharply %s\n", pokemon->nickname, stat, rise);
+            else printf("%s's %s %s\n", pokemon->nickname, stat, rise);
             sleep(1);
         }
     }
