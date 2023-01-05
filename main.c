@@ -71,11 +71,12 @@ void switch_out(struct battle_state* state) {
     struct pokemon_state* selected_pokemon;
     struct pokemon_state* placeholder;
     do {
-        printf("%s (1)\n", state->player_pokemon2->pokemon->nickname);
-        printf("%s (2)\n", state->player_pokemon3->pokemon->nickname);
-        printf("%s (3)\n", state->player_pokemon4->pokemon->nickname);
-        printf("%s (4)\n", state->player_pokemon5->pokemon->nickname);
-        printf("%s (5)\n", state->player_pokemon6->pokemon->nickname);
+        if (state->player_teamsize>1) printf("%s (1)\n", state->player_pokemon2->pokemon->nickname);
+        else return;
+        if (state->player_teamsize>2) printf("%s (2)\n", state->player_pokemon3->pokemon->nickname);
+        if (state->player_teamsize>3) printf("%s (3)\n", state->player_pokemon4->pokemon->nickname);
+        if (state->player_teamsize>4) printf("%s (4)\n", state->player_pokemon5->pokemon->nickname);
+        if (state->player_teamsize>5) printf("%s (5)\n", state->player_pokemon6->pokemon->nickname);
 
         printf(">>");
         scanf("%d", &selection);
@@ -155,6 +156,7 @@ int battle_main(struct battle_state* state) {
     int sel;
     bool attack;
     bool sw;
+    bool help;
     char command[8];
     pokemon* order[2];
     int i;
@@ -171,46 +173,55 @@ main_prompt:
         printf("What to do?\n\n>> ");
         scanf("%s",command);
         for (int i = 0; i<strlen(command); i++) {
-            attack = strncmp(command, "attack", i) == 0;
+            attack = strncmp(command, "attack", i+1) == 0;
             if (!attack) {
                 break;
             }
         }
         for (int i = 0; i<strlen(command); i++) {
-            sw = strncmp(command, "switch", i) == 0;
+            sw = strncmp(command, "switch", i+1) == 0;
             if (!sw) break;
         }
         for (int i = 0; i<strlen(command); i++) {
-            bool help = strncmp(command, "help", i) == 0;
-            if (help && i == strlen(command)) {
-                printf("\nCommands: \n\nattack\nswitch\n\n");
-                goto main_prompt;
+            help = strncmp(command, "help", i+1) == 0;
+            if (!help) {
+                break;
             }
         }
-        if (!sw && !attack) {
+        if (!sw && !attack && !help) {
             printf("Error: %s is not a valid command.\n", command);
+            goto main_prompt;
+        }
+        if (help) {
+            printf("\nCommands: \n\nattack\nswitch\n\n");
+            goto main_prompt;
+        }
+        if (sw && state->player_teamsize == 1) {
+            printf("Error: Only one pokemon\n\n");
             goto main_prompt;
         }
 
 move_prompt:
-        printf("\n%s (1)\n%d\n", state->player_pokemon1->pokemon->move1->name,state->player_pokemon1->PP[1]);
-        printf("%s (2)\n%d\n", state->player_pokemon1->pokemon->move2->name,state->player_pokemon1->PP[2]);
-        printf("%s (3)\n%d\n", state->player_pokemon1->pokemon->move3->name,state->player_pokemon1->PP[3]);
-        printf("%s (4)\n%d\n", state->player_pokemon1->pokemon->move4->name,state->player_pokemon1->PP[4]);
-        printf("\n>> ");
-        scanf("%d",&sel);
-        if(state->player_pokemon1->PP[sel] == 0) {
-            printf("PP depleted\n");
-            goto move_prompt;
-        }
-        else {
-            state->player_pokemon1->PP[sel]--;
+        if (!sw) {
+            printf("\n%s (1)\n%d\n", state->player_pokemon1->pokemon->move1->name,state->player_pokemon1->PP[1]);
+            printf("%s (2)\n%d\n", state->player_pokemon1->pokemon->move2->name,state->player_pokemon1->PP[2]);
+            printf("%s (3)\n%d\n", state->player_pokemon1->pokemon->move3->name,state->player_pokemon1->PP[3]);
+            printf("%s (4)\n%d\n", state->player_pokemon1->pokemon->move4->name,state->player_pokemon1->PP[4]);
+            printf("\n>> ");
+            scanf("%d",&sel);
+            if(state->player_pokemon1->PP[sel] == 0) {
+                printf("PP depleted\n");
+                goto move_prompt;
+            }
+            else {
+                state->player_pokemon1->PP[sel]--;
+            }
         }
 
         speed_order(state, order);
-
         for(i = 0; i < SINGLES; i++) {                  // Each pokemon makes a move
             if(!faint(order[i])) {
+                if(sw) switch_out(state);
                 make_chosen_move(sel, order[i], state, attack);
                 healthbar(state->player_pokemon1->pokemon, &health_bar);
                 healthbar(state->opponent_pokemon1->pokemon, &opp_bar);

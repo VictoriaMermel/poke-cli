@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include "factory.h"
+#include "frontier.h"
 #include "pokemon.h"
 #include "moves.h"
 #include "ability.h"
@@ -35,7 +35,7 @@ prompt:
     else if (strcmp(input, "!") == 0) { printf("Battle With Rental Pokemon\n"); goto prompt; }
     else if (strcmp(input, "q") == 0) return true;
     else {
-        printf("Error: not a valid input");
+        printf("Error: not a valid input\n");
         goto prompt;
     }
 }
