@@ -1,4 +1,4 @@
-/* Command Line Pokemon Battle Game
+/* Sel Line Pokemon Battle Game
 **
 ** Copyright © 2022 Victoria Mermel
 **
@@ -107,7 +107,7 @@ void switch_out(struct battle_state* state) {
 }
 
 
-int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* state) {
+int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* state, bool attack) {
 
     void *movevoid;
     move *move;
@@ -115,6 +115,9 @@ int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* stat
 
     if(pokemon->player) {
         sel = selection;
+        if(!attack) {
+            return 0;
+        }
     }
     else {
         sel = move_selection(pokemon, 0);
@@ -149,7 +152,10 @@ int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* stat
 int battle_main(struct battle_state* state) {
 
 
-    int command;
+    int sel;
+    bool attack;
+    bool sw;
+    char command[8];
     pokemon* order[2];
     int i;
 
@@ -161,26 +167,51 @@ int battle_main(struct battle_state* state) {
     printf("%s:  [%s]\n\n", state->opponent_pokemon1->pokemon->nickname, opp_bar);
 
     for(;;) {    // Rounds
+main_prompt:
+        printf("What to do?\n\n>> ");
+        scanf("%s",command);
+        for (int i = 0; i<strlen(command); i++) {
+            attack = strncmp(command, "attack", i) == 0;
+            if (!attack) {
+                break;
+            }
+        }
+        for (int i = 0; i<strlen(command); i++) {
+            sw = strncmp(command, "switch", i) == 0;
+            if (!sw) break;
+        }
+        for (int i = 0; i<strlen(command); i++) {
+            bool help = strncmp(command, "help", i) == 0;
+            if (help && i == strlen(command)) {
+                printf("\nCommands: \n\nattack\nswitch\n\n");
+                goto main_prompt;
+            }
+        }
+        if (!sw && !attack) {
+            printf("Error: %s is not a valid command.\n", command);
+            goto main_prompt;
+        }
 
-        printf("%s (1)\n%d\n", state->player_pokemon1->pokemon->move1->name,state->player_pokemon1->PP[1]);
+move_prompt:
+        printf("\n%s (1)\n%d\n", state->player_pokemon1->pokemon->move1->name,state->player_pokemon1->PP[1]);
         printf("%s (2)\n%d\n", state->player_pokemon1->pokemon->move2->name,state->player_pokemon1->PP[2]);
         printf("%s (3)\n%d\n", state->player_pokemon1->pokemon->move3->name,state->player_pokemon1->PP[3]);
         printf("%s (4)\n%d\n", state->player_pokemon1->pokemon->move4->name,state->player_pokemon1->PP[4]);
-        printf(">> ");
-        scanf("%d",&command);
-        if(state->player_pokemon1->PP[command] == 0) {
-            printf("PP depleted");
-            break;
+        printf("\n>> ");
+        scanf("%d",&sel);
+        if(state->player_pokemon1->PP[sel] == 0) {
+            printf("PP depleted\n");
+            goto move_prompt;
         }
         else {
-            state->player_pokemon1->PP[command]--;
+            state->player_pokemon1->PP[sel]--;
         }
 
         speed_order(state, order);
 
         for(i = 0; i < SINGLES; i++) {                  // Each pokemon makes a move
             if(!faint(order[i])) {
-                make_chosen_move(command, order[i], state);
+                make_chosen_move(sel, order[i], state, attack);
                 healthbar(state->player_pokemon1->pokemon, &health_bar);
                 healthbar(state->opponent_pokemon1->pokemon, &opp_bar);
                 printf("\n%s: %d  [%s]\n", state->player_pokemon1->pokemon->nickname, state->player_pokemon1->health, health_bar);
