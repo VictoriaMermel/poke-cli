@@ -62,7 +62,7 @@ pokemon* get_rand_pokemon(pokemon* pool) {
 }
 
 void summary(pokemon* pokemon) {
-    printf("%s\n%s\n%s\n%s\n%s/n", pokemon->nickname, pokemon->move1->name, pokemon->move2->name, pokemon->move3->name, pokemon->move4->name);
+    printf("%s\n\n%s\n%s\n%s\n%s\n", pokemon->nickname, pokemon->move1->name, pokemon->move2->name, pokemon->move3->name, pokemon->move4->name);
 }
 
 void factory_main() {
@@ -147,7 +147,7 @@ what_to_do_prompt:
         case 3 :
             goto offer_prompt;
         default:
-            printf("Error: Enter a value between 1 and 3");
+            printf("Error: Enter a value between 1 and 3\n");
             goto what_to_do_prompt;
     }
 done:
