@@ -24,13 +24,13 @@ extern species squirtle;
 bool battle_mode_menu() {
 
     char input[8];
-    printf("(1) Battle Factory   ('!' for rules)\n");
 prompt:
+    printf("(1) Battle Factory   ('!' for rules)\n");
     printf("\n>> ");
     scanf("%s", input);
     if (strcmp(input, "1") == 0) {
         factory_main();
-        goto prompt;
+        return true;
     }
     else if (strcmp(input, "!") == 0) { printf("Battle With Rental Pokemon\n"); goto prompt; }
     else if (strcmp(input, "q") == 0) return true;

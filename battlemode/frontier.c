@@ -61,6 +61,10 @@ pokemon* get_rand_pokemon(pokemon* pool) {
     return pool+(sizeof(pokemon)*rand);
 }
 
+void summary(pokemon* pokemon) {
+    printf("%s\n%s\n%s\n%s\n%s/n", pokemon->nickname, pokemon->move1->name, pokemon->move2->name, pokemon->move3->name, pokemon->move4->name);
+}
+
 void factory_main() {
     printf("factory mode\n\n");
     int selection;
@@ -138,7 +142,7 @@ what_to_do_prompt:
                 goto offer_prompt;
             }
         case 2 :
-            printf("%s\n", offers[selection]->nickname);
+            summary(viewed_pokemon);
             goto what_to_do_prompt;
         case 3 :
             goto offer_prompt;
