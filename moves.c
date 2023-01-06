@@ -136,7 +136,7 @@ void make_generic_move(struct battle_state* state, move* move, bool player) {
         damage = damageCalc(attacker->level, move->Power, atk, defender->stats->Defense, false, move->type,
                         pokemon_types, def_type);
 
-        print_effectiveness(attacker);
+        print_effectiveness(defender);
         print_crit();
     }
 
@@ -153,3 +153,4 @@ move vine_whip = { "Vine Whip", &damage_dealing, GRASS,PHYSICAL,25,45,100,true,t
 move swords_dance = { "Swords Dance",&damage_dealing,NORMAL,STATUS,20,0,100,false,false,false,true,false, 2};
 move growl = { "Growl",&damage_dealing,NORMAL,STATUS,40,0,100,false,true,true,false,true,0,-1 };
 move tail_whip = { "Tail Whip",&damage_dealing,NORMAL,STATUS,30,0,100,false,true,true,false,true,0,0,0,-1 };
+move dbg = { "Big Attack",&damage_dealing,NORMAL,PHYSICAL,99,200,100 };

@@ -40,7 +40,7 @@ pokemon* initialize_pool(int level) {
     pokemon* pool = malloc(sizeof(pokemon)*15);
 
     create_pokemon(pool, &venusaur, level, &tackle, OVERGROW, 0);
-    create_pokemon(pool, &gengar, level, &tackle, CURSED_BODY, 1);
+    create_pokemon(pool, &gengar, level, &dbg, CURSED_BODY, 1);
     create_pokemon(pool, &blastoise, level, &tackle, OVERGROW, 2);
     create_pokemon(pool, &kingler, level, &tackle, SHELL_ARMOR, 3);
     create_pokemon(pool, &hypno, level, &tackle, INSOMNIA, 4);
@@ -74,8 +74,8 @@ void factory_main() {
     pokemon* team[3];
     uint team_selected = 0;
 
-    pokemon* offers[9];
     pokemon * pool = initialize_pool(60);
+    pokemon* offers[9];
     for (i = 0; i<9; i++) {
         pokemon* new = get_rand_pokemon(pool);
         bool notnew = false;
@@ -87,6 +87,9 @@ void factory_main() {
         }
         else i--;
     }
+#ifdef DEBUG
+    offers[0] = pool+sizeof(pokemon); // Gengar will be always available in DEBUG mode because it knows dbg move.
+#endif
 offer_prompt:
     for (i = 0; i<6; i++) {
         if (offers[i] == team[0] || offers[i] == team[1] || offers[i] == team[2] ) {
@@ -222,28 +225,68 @@ confirmation_prompt:
         if(offers[6]->move2 > 0) state.opponent_pokemon1->PP[2] = offers[6]->move2->PP;
         if(offers[6]->move3 > 0) state.opponent_pokemon1->PP[3] = offers[6]->move3->PP;
         if(offers[6]->move4 > 0) state.opponent_pokemon1->PP[4] = offers[6]->move4->PP;
-        state.player_pokemon1->PP[1] = team[0]->move1->PP;
-        if(team[1]->move2 > 0) state.player_pokemon1->PP[2] = team[1]->move2->PP;
-        if(team[1]->move3 > 0) state.player_pokemon1->PP[3] = team[1]->move3->PP;
-        if(team[1]->move4 > 0) state.player_pokemon1->PP[4] = team[1]->move4->PP;
-        state.opponent_pokemon1->PP[1] = offers[6]->move1->PP;
-        if(offers[7]->move2 > 0) state.opponent_pokemon1->PP[2] = offers[7]->move2->PP;
-        if(offers[7]->move3 > 0) state.opponent_pokemon1->PP[3] = offers[7]->move3->PP;
-        if(offers[7]->move4 > 0) state.opponent_pokemon1->PP[4] = offers[7]->move4->PP;
-        state.player_pokemon1->PP[1] = team[0]->move1->PP;
-        if(team[2]->move2 > 0) state.player_pokemon1->PP[2] = team[2]->move2->PP;
-        if(team[2]->move3 > 0) state.player_pokemon1->PP[3] = team[2]->move3->PP;
-        if(team[2]->move4 > 0) state.player_pokemon1->PP[4] = team[2]->move4->PP;
-        state.opponent_pokemon1->PP[1] = offers[6]->move1->PP;
-        if(offers[8]->move2 > 0) state.opponent_pokemon1->PP[2] = offers[8]->move2->PP;
-        if(offers[8]->move3 > 0) state.opponent_pokemon1->PP[3] = offers[8]->move3->PP;
-        if(offers[8]->move4 > 0) state.opponent_pokemon1->PP[4] = offers[8]->move4->PP;
+        state.player_pokemon2->PP[1] = team[0]->move1->PP;
+        if(team[1]->move2 > 0) state.player_pokemon2->PP[2] = team[1]->move2->PP;
+        if(team[1]->move3 > 0) state.player_pokemon2->PP[3] = team[1]->move3->PP;
+        if(team[1]->move4 > 0) state.player_pokemon2->PP[4] = team[1]->move4->PP;
+        state.opponent_pokemon2->PP[1] = offers[6]->move1->PP;
+        if(offers[7]->move2 > 0) state.opponent_pokemon2->PP[2] = offers[7]->move2->PP;
+        if(offers[7]->move3 > 0) state.opponent_pokemon2->PP[3] = offers[7]->move3->PP;
+        if(offers[7]->move4 > 0) state.opponent_pokemon2->PP[4] = offers[7]->move4->PP;
+        state.player_pokemon3->PP[1] = team[0]->move1->PP;
+        if(team[2]->move2 > 0) state.player_pokemon3->PP[2] = team[2]->move2->PP;
+        if(team[2]->move3 > 0) state.player_pokemon3->PP[3] = team[2]->move3->PP;
+        if(team[2]->move4 > 0) state.player_pokemon3->PP[4] = team[2]->move4->PP;
+        state.opponent_pokemon3->PP[1] = offers[6]->move1->PP;
+        if(offers[8]->move2 > 0) state.opponent_pokemon3->PP[2] = offers[8]->move2->PP;
+        if(offers[8]->move3 > 0) state.opponent_pokemon3->PP[3] = offers[8]->move3->PP;
+        if(offers[8]->move4 > 0) state.opponent_pokemon3->PP[4] = offers[8]->move4->PP;
 
-        int win = battle_main(&state);
+        int win = (battle_main(&state) == 0);
         if(!win) break;
         streak++;
+
+        printf("\nCongratulations! Would you like to switch out a pokemon?\n\n");
+mon_to_steel:
+        for(i=6; i<9; i++) {
+            printf("(%d) %s\n", i-5, offers[i]->nickname);
+        }
+        printf("Press 'q' to contiue\n\n>> ");
+        scanf("%d", &selection);
+        if (selection == 'q') continue;
+        else if (selection > 8 || selection < 1) {
+            printf("Error: Select number between 1 and 3\n");
+            goto mon_to_steel;
+        }
+        pokemon * wanted = offers[selection+5];
+mon_to_return:
+        printf("Replace which pokemon with %s?\n\n", wanted->nickname);
+        for (i=0; i<3; i++) {
+            printf("(%d) %s\n", i+1, team[i]->nickname);
+        }
+        printf("Press 'q' to cancel\n\n>>");
+        scanf("%d", &selection);
+        if (selection == 'q') goto mon_to_steel;
+        else if (selection > 3 || selection < 1) {
+            printf("Error: Select number between 1 and 3\n");
+            goto mon_to_return;
+        }
+        team[selection-1] = wanted;
+
+        memcpy(offers, team, sizeof(team));
+        for(i = 6; i<9; i++) {
+            pokemon* new = get_rand_pokemon(pool);
+            bool notnew = false;
+            for(int j = 0; j<9; j++) {
+                if (offers[j] == new) notnew = true;
+            }
+            if (i == 0 || (!notnew)){
+                offers[i] = new;
+            }
+            else i--;
+        }
     }
-    printf("%d",streak);
+    printf("Your Streak: %d",streak);
 
     free(pool);
 }

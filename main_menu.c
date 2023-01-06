@@ -108,6 +108,7 @@ void demo() {
     .ability = OVERGROW,
     .move1 = &tackle,
     .move2 = &growl,
+    .move3 = &dbg,
 };
     bulba.species = &bulbasaur;
 

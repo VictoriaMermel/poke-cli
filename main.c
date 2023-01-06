@@ -28,7 +28,9 @@
 void healthbar(pokemon* pokemon, char** healthbar) {
     int outoftwenty = ((float)pokemon->status->health / (float)pokemon->stats->HP) * 20;
     memset(*healthbar, '-', 20);
+    if (pokemon->status->health > 0) {
     memset(*healthbar, '*', outoftwenty);
+    }
 }
 
 bool player_whited_out(struct battle_state* state) {
@@ -73,7 +75,7 @@ void switch_out(struct battle_state* state) {
 
     int i;
     bool fainted = false;
-    struct pokemon_state* selected_pokemon;
+    struct pokemon_state** selected_pokemon;
     struct pokemon_state* placeholder;
     do {
         if (state->player_teamsize>1) printf("%s (1)\n", state->player_pokemon2->pokemon->nickname);
@@ -89,31 +91,31 @@ void switch_out(struct battle_state* state) {
         placeholder = state->player_pokemon1;
         switch (i) {
             case 1 :
-                selected_pokemon = state->player_pokemon2;
+                selected_pokemon = &state->player_pokemon2;
                 break;
             case 2 :
-                selected_pokemon = state->player_pokemon3;
+                selected_pokemon = &state->player_pokemon3;
                 break;
             case 3 :
-                selected_pokemon = state->player_pokemon4;
+                selected_pokemon = &state->player_pokemon4;
                 break;
             case 4 :
-                selected_pokemon = state->player_pokemon5;
+                selected_pokemon = &state->player_pokemon5;
                 break;
             case 5 :
-                selected_pokemon = state->player_pokemon6;
+                selected_pokemon = &state->player_pokemon6;
                 break;
             default:
                 fainted = true;
                 continue;
         }
-        if (selected_pokemon->fainted) {
+        if ((*selected_pokemon)->fainted) {
             printf("FAINTED\n");
             fainted = true;
         }
         else {
-            state->player_pokemon1 = selected_pokemon;
-            selected_pokemon = placeholder;
+            state->player_pokemon1 = *selected_pokemon;
+            *selected_pokemon = placeholder;
             fainted = false;
         }
     } while (fainted);

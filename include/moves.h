@@ -49,5 +49,6 @@ extern move growl;
 extern move pound;
 extern move vine_whip;
 extern move swords_dance;
+extern move dbg;
 
 #endif // MOVES_H_
