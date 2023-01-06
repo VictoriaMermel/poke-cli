@@ -110,7 +110,9 @@ void demo() {
     .Speed = 45,
     .move1 = &tackle,
     .move2 = &growl,
+    #ifdef DEBUG
     .move3 = &dbg,
+    #endif
 };
     bulba.species = &bulbasaur;
 

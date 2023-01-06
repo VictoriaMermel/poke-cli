@@ -160,4 +160,6 @@ move swords_dance = { "Swords Dance",&damage_dealing,NORMAL,STATUS,20,0,100,fals
 move growl = { "Growl",&damage_dealing,NORMAL,STATUS,40,0,100,false,true,true,false,true,0,-1 };
 move tail_whip = { "Tail Whip",&damage_dealing,NORMAL,STATUS,30,0,100,false,true,true,false,true,0,0,0,-1 };
 move splash = { "Splash", &use_splash, WATER,PHYSICAL };
+#ifdef DEBUG
 move dbg = { "Big Attack",&damage_dealing,NORMAL,PHYSICAL,99,200,100 };
+#endif

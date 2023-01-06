@@ -50,6 +50,8 @@ extern move pound;
 extern move vine_whip;
 extern move swords_dance;
 extern move splash;
+#ifdef DEBUG
 extern move dbg;
+#endif
 
 #endif // MOVES_H_
