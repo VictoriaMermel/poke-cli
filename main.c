@@ -65,7 +65,7 @@ bool faint(pokemon* target) {
 
 void switch_out(struct battle_state* state) {
 
-    int selection;
+    int i;
     bool fainted = false;
     struct pokemon_state* selected_pokemon;
     struct pokemon_state* placeholder;
@@ -77,32 +77,41 @@ void switch_out(struct battle_state* state) {
         if (state->player_teamsize>4) printf("%s (4)\n", state->player_pokemon5->pokemon->nickname);
         if (state->player_teamsize>5) printf("%s (5)\n", state->player_pokemon6->pokemon->nickname);
 
-        printf(">>");
-        scanf("%d", &selection);
+        printf("\n>> ");
+        scanf("%d", &i);
 
         placeholder = state->player_pokemon1;
-        switch (selection) {
+        switch (i) {
             case 1 :
                 selected_pokemon = state->player_pokemon2;
+                break;
             case 2 :
                 selected_pokemon = state->player_pokemon3;
+                break;
             case 3 :
                 selected_pokemon = state->player_pokemon4;
+                break;
             case 4 :
                 selected_pokemon = state->player_pokemon5;
+                break;
             case 5 :
                 selected_pokemon = state->player_pokemon6;
+                break;
+            default:
+                fainted = true;
+                continue;
         }
         if (selected_pokemon->fainted) {
-            printf("FAINTED");
+            printf("FAINTED\n");
             fainted = true;
         }
         else {
             state->player_pokemon1 = selected_pokemon;
             selected_pokemon = placeholder;
+            fainted = false;
         }
     } while (fainted);
-    printf("Go %s!\n", state->player_pokemon1->pokemon->nickname);
+    printf("\nGo %s!\n\n", state->player_pokemon1->pokemon->nickname);
 
     state->player_pokemon1->atk_stage = 0;
     state->player_pokemon1->def_stage = 0;
@@ -238,9 +247,9 @@ move_prompt:
         }
 
         speed_order(state, order);
+        if(sw) switch_out(state);
         for(i = 0; i < SINGLES; i++) {                  // Each pokemon makes a move
             if(!faint(order[i])) {
-                if(sw) switch_out(state);
                 make_chosen_move(sel, order[i], state, attack);
                 healthbar(state->player_pokemon1->pokemon, &health_bar);
                 healthbar(state->opponent_pokemon1->pokemon, &opp_bar);
