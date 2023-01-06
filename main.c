@@ -19,6 +19,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#ifdef NT
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
 void healthbar(pokemon* pokemon, char** healthbar) {
     int outoftwenty = ((float)pokemon->status->health / (float)pokemon->stats->HP) * 20;
     memset(*healthbar, '-', 20);
@@ -112,6 +118,7 @@ void switch_out(struct battle_state* state) {
         }
     } while (fainted);
     printf("\nGo %s!\n\n", state->player_pokemon1->pokemon->nickname);
+    sleep(1);
 
     state->player_pokemon1->atk_stage = 0;
     state->player_pokemon1->def_stage = 0;
