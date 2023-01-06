@@ -35,7 +35,7 @@ void healthbar(pokemon* pokemon, char** healthbar) {
 
 bool player_whited_out(struct battle_state* state) {
 
-    if(state->player_teamsize == 0) {
+    if(state->player_remaining == 0) {
         return true;
     }
     else return false;
@@ -267,7 +267,7 @@ move_prompt:
             }
             if(faint(state->player_pokemon1->pokemon)) {
                 printf("%s fainted\n", state->player_pokemon1->pokemon->nickname);
-                state->player_teamsize--;
+                state->player_remaining--;
                 if(player_whited_out(state)) {
                     printf("You whited out\n");
                     free(health_bar);
