@@ -19,16 +19,16 @@
 #include <stdbool.h>
 
 
+struct stats demo_stats = {100,50,50,50,50,50};
 
 void create_pokemon(pokemon* pool, species* species, int level, move* m1, ability ability, int i) {
-
-    static struct stats demo_stats = {50,50,50,50,50,50};
 
     pokemon pokemon = {
     .species = species,
     .stats = &demo_stats,
-    .level = 60,
+    .level = 50,
     .move1 = m1,
+    .player = false,
     .ability = ability,
 };
     strcpy(pokemon.nickname, species->name);
@@ -74,12 +74,12 @@ void factory_main() {
     pokemon* team[3];
     uint team_selected = 0;
 
-    pokemon* offers[6];
+    pokemon* offers[9];
     pokemon * pool = initialize_pool(60);
-    for (i = 0; i<6; i++) {
+    for (i = 0; i<9; i++) {
         pokemon* new = get_rand_pokemon(pool);
         bool notnew = false;
-        for(int j = 0; j<6; j++) {
+        for(int j = 0; j<9; j++) {
             if (offers[j] == new) notnew = true;
         }
         if (i == 0 || (!notnew)){
@@ -164,6 +164,86 @@ confirmation_prompt:
     else goto confirmation_prompt;
 
     int streak = 0;
+    for(;;) {
+        struct battle_state state;                  // This looks awful, need to fix structures
+        struct pokemon_state player_pokemon1;       // in pokemon.h ASAP
+        struct pokemon_state player_pokemon2;
+        struct pokemon_state player_pokemon3;
+        struct pokemon_state opponent_pokemon1;
+        struct pokemon_state opponent_pokemon2;
+        struct pokemon_state opponent_pokemon3;
+        state.player_teamsize = 3;
+        state.opponent_teamsize = 3;
+        state.player_pokemon1 = &player_pokemon1;
+        state.player_pokemon2 = &player_pokemon2;
+        state.player_pokemon3 = &player_pokemon3;
+        state.opponent_pokemon1 = &opponent_pokemon1;
+        state.opponent_pokemon2 = &opponent_pokemon2;
+        state.opponent_pokemon3 = &opponent_pokemon3;
+
+        team[0]->player = true;
+        team[1]->player = true;
+        team[2]->player = true;
+
+        state.player_pokemon1->pokemon = team[0];
+        state.player_pokemon2->pokemon = team[1];
+        state.player_pokemon3->pokemon = team[2];
+
+        state.opponent_pokemon1->pokemon = offers[6];
+        state.opponent_pokemon2->pokemon = offers[7];
+        state.opponent_pokemon3->pokemon = offers[8];
+
+        team[0]->status = state.player_pokemon1;
+        team[1]->status = state.player_pokemon2;
+        team[2]->status = state.player_pokemon3;
+        offers[6]->status = state.opponent_pokemon1;
+        offers[7]->status = state.opponent_pokemon2;
+        offers[8]->status = state.opponent_pokemon3;
+
+        state.player_pokemon1->health = team[0]->stats->HP;
+        state.opponent_pokemon1->health = offers[6]->stats->HP;
+        state.player_pokemon2->health = team[1]->stats->HP;
+        state.opponent_pokemon2->health = offers[7]->stats->HP;
+        state.player_pokemon3->health = team[2]->stats->HP;
+        state.opponent_pokemon3->health = offers[8]->stats->HP;
+        state.player_pokemon1-> fainted = false;
+        state.player_pokemon2-> fainted = false;
+        state.player_pokemon3-> fainted = false;
+        state.opponent_pokemon1 -> fainted = false;
+        state.opponent_pokemon2 -> fainted = false;
+        state.opponent_pokemon3 -> fainted = false;
+
+        unsigned int PP[5];
+        state.player_pokemon1->PP[1] = team[0]->move1->PP;
+        if(team[0]->move2 > 0) state.player_pokemon1->PP[2] = team[0]->move2->PP;
+        if(team[0]->move3 > 0) state.player_pokemon1->PP[3] = team[0]->move3->PP;
+        if(team[0]->move4 > 0) state.player_pokemon1->PP[4] = team[0]->move4->PP;
+        state.opponent_pokemon1->PP[1] = offers[6]->move1->PP;
+        if(offers[6]->move2 > 0) state.opponent_pokemon1->PP[2] = offers[6]->move2->PP;
+        if(offers[6]->move3 > 0) state.opponent_pokemon1->PP[3] = offers[6]->move3->PP;
+        if(offers[6]->move4 > 0) state.opponent_pokemon1->PP[4] = offers[6]->move4->PP;
+        state.player_pokemon1->PP[1] = team[0]->move1->PP;
+        if(team[1]->move2 > 0) state.player_pokemon1->PP[2] = team[1]->move2->PP;
+        if(team[1]->move3 > 0) state.player_pokemon1->PP[3] = team[1]->move3->PP;
+        if(team[1]->move4 > 0) state.player_pokemon1->PP[4] = team[1]->move4->PP;
+        state.opponent_pokemon1->PP[1] = offers[6]->move1->PP;
+        if(offers[7]->move2 > 0) state.opponent_pokemon1->PP[2] = offers[7]->move2->PP;
+        if(offers[7]->move3 > 0) state.opponent_pokemon1->PP[3] = offers[7]->move3->PP;
+        if(offers[7]->move4 > 0) state.opponent_pokemon1->PP[4] = offers[7]->move4->PP;
+        state.player_pokemon1->PP[1] = team[0]->move1->PP;
+        if(team[2]->move2 > 0) state.player_pokemon1->PP[2] = team[2]->move2->PP;
+        if(team[2]->move3 > 0) state.player_pokemon1->PP[3] = team[2]->move3->PP;
+        if(team[2]->move4 > 0) state.player_pokemon1->PP[4] = team[2]->move4->PP;
+        state.opponent_pokemon1->PP[1] = offers[6]->move1->PP;
+        if(offers[8]->move2 > 0) state.opponent_pokemon1->PP[2] = offers[8]->move2->PP;
+        if(offers[8]->move3 > 0) state.opponent_pokemon1->PP[3] = offers[8]->move3->PP;
+        if(offers[8]->move4 > 0) state.opponent_pokemon1->PP[4] = offers[8]->move4->PP;
+
+        int win = battle_main(&state);
+        if(!win) break;
+        streak++;
+    }
+    printf("%d",streak);
 
     free(pool);
 }

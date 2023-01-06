@@ -23,6 +23,12 @@ void ai_faint(struct battle_state* state) {
     state->opponent_pokemon6 = 0;
 
     printf("Opponent sent out %s\n", state->opponent_pokemon1->pokemon->nickname);
+
+    state->opponent_pokemon1->atk_stage = 0;
+    state->opponent_pokemon1->def_stage = 0;
+    state->opponent_pokemon1->spa_stage = 0;
+    state->opponent_pokemon1->spe_stage = 0;
+    state->opponent_pokemon1->spd_stage = 0;
 }
 
 int move_selection(pokemon* pokemon, int skill) {

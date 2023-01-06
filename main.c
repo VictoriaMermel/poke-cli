@@ -23,7 +23,6 @@ void healthbar(pokemon* pokemon, char** healthbar) {
     int outoftwenty = ((float)pokemon->status->health / (float)pokemon->stats->HP) * 20;
     memset(*healthbar, '-', 20);
     memset(*healthbar, '*', outoftwenty);
-
 }
 
 bool player_whited_out(struct battle_state* state) {
@@ -104,7 +103,13 @@ void switch_out(struct battle_state* state) {
         }
     } while (fainted);
     printf("Go %s!\n", state->player_pokemon1->pokemon->nickname);
-    
+
+    state->player_pokemon1->atk_stage = 0;
+    state->player_pokemon1->def_stage = 0;
+    state->player_pokemon1->spa_stage = 0;
+    state->player_pokemon1->spe_stage = 0;
+    state->player_pokemon1->spd_stage = 0;
+
 }
 
 
@@ -152,7 +157,6 @@ int make_chosen_move(int selection, pokemon * pokemon, struct battle_state* stat
 
 int battle_main(struct battle_state* state) {
 
-
     int sel;
     bool attack;
     bool sw;
@@ -161,10 +165,25 @@ int battle_main(struct battle_state* state) {
     pokemon* order[2];
     int i;
 
-    char* health_bar = malloc(sizeof(char)*20);
-    char* opp_bar = malloc(sizeof(char)*20);
+    state->player_pokemon1->atk_stage = 0;
+    state->player_pokemon1->def_stage = 0;
+    state->player_pokemon1->spa_stage = 0;
+    state->player_pokemon1->spe_stage = 0;
+    state->player_pokemon1->spd_stage = 0;
+
+    state->opponent_pokemon1->atk_stage = 0;
+    state->opponent_pokemon1->def_stage = 0;
+    state->opponent_pokemon1->spa_stage = 0;
+    state->opponent_pokemon1->spe_stage = 0;
+    state->opponent_pokemon1->spd_stage = 0;
+
+
+    char* health_bar = malloc(sizeof(char)*22);
+    char* opp_bar = malloc(sizeof(char)*22);
     healthbar(state->player_pokemon1->pokemon, &health_bar);
+    health_bar[20] = '\0';
     healthbar(state->opponent_pokemon1->pokemon, &opp_bar);
+    opp_bar[20] = '\0';
     printf("\n%s: %d  [%s]\n", state->player_pokemon1->pokemon->nickname, state->player_pokemon1->health, health_bar);
     printf("%s:  [%s]\n\n", state->opponent_pokemon1->pokemon->nickname, opp_bar);
 
