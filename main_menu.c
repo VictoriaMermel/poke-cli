@@ -118,7 +118,7 @@ void demo() {
     .player = false,
     .stats = &turters_stats,
     .ability = TORRENT,
-    .move1 = &tackle,
+    .move1 = &splash,
     .move2 = &tail_whip,
 };
     turters.species = &squirtle;

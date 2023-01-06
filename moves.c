@@ -147,10 +147,17 @@ void damage_dealing(struct battle_state* state, move* move, bool player) {
     make_generic_move(state, move, player);
 }
 
+void use_splash(void) {
+    sleep(1);
+    printf("But nothing happened\n");
+    sleep(1);
+}
+
 move tackle = { "Tackle", &damage_dealing, NORMAL,PHYSICAL,53,40,100,true,true,false,false,true};
 move pound = { "Pound", &damage_dealing, NORMAL,PHYSICAL,35,40,100,true,true,false,false,true };
 move vine_whip = { "Vine Whip", &damage_dealing, GRASS,PHYSICAL,25,45,100,true,true,false,false,true };
 move swords_dance = { "Swords Dance",&damage_dealing,NORMAL,STATUS,20,0,100,false,false,false,true,false, 2};
 move growl = { "Growl",&damage_dealing,NORMAL,STATUS,40,0,100,false,true,true,false,true,0,-1 };
 move tail_whip = { "Tail Whip",&damage_dealing,NORMAL,STATUS,30,0,100,false,true,true,false,true,0,0,0,-1 };
+move splash = { "Splash", &use_splash, WATER,PHYSICAL };
 move dbg = { "Big Attack",&damage_dealing,NORMAL,PHYSICAL,99,200,100 };
