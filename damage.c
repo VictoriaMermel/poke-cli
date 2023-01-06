@@ -73,3 +73,13 @@ void print_crit(void) {
         printf("Its a critical hit!");
     }
 }
+
+int stat_calc(char IV, unsigned char EV, int base, int level) {
+    int stat = (((2*base+IV+(EV/4))*level)/100)+5;
+    return stat;
+}
+
+int HP_calc(char IV, unsigned char EV, int base, int level) {
+    int HP = ((2*base+IV+(EV/4))*level)/100+level+10;
+    return HP;
+}

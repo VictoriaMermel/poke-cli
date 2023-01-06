@@ -26,7 +26,7 @@
 #endif
 
 void healthbar(pokemon* pokemon, char** healthbar) {
-    int outoftwenty = ((float)pokemon->status->health / (float)pokemon->stats->HP) * 20;
+    int outoftwenty = ((float)pokemon->status->health / (float)pokemon->HP) * 20;
     memset(*healthbar, '-', 20);
     if (pokemon->status->health > 0) {
     memset(*healthbar, '*', outoftwenty);
@@ -52,7 +52,7 @@ bool player_wins(struct battle_state* state) {
 void speed_order(struct battle_state* state, pokemon** order) {
 
     bool player_first;
-    if(state->player_pokemon1->pokemon->stats->Speed > state->opponent_pokemon1->pokemon->stats->Speed) {
+    if(state->player_pokemon1->pokemon->Speed > state->opponent_pokemon1->pokemon->Speed) {
         order[0] = state->player_pokemon1->pokemon;
         order[1] = state->opponent_pokemon1->pokemon;
     }

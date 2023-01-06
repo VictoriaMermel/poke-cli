@@ -49,15 +49,6 @@ typedef const struct species {
     unsigned int tms[];
 } species;
 
-struct stats {
-    unsigned short HP;
-    unsigned short Attack;
-    unsigned short Defense;
-    unsigned short Sp_Atk;
-    unsigned short Sp_Def;
-    unsigned short Speed;
-};
-
 typedef const struct move move;
 
 
@@ -68,10 +59,27 @@ typedef struct pokemon {
     species* species;
     char nickname[16];
     unsigned char level;
-    struct stats* stats;
+    unsigned short HP;
+    unsigned short Attack;
+    unsigned short Defense;
+    unsigned short Sp_Atk;
+    unsigned short Sp_Def;
+    unsigned short Speed;
     struct pokemon_state* status;
     ability ability;
     bool player;
+    char atk_IV;
+    char def_IV;
+    char HP_IV;
+    char spa_IV;
+    char spd_IV;
+    char spe_IV;
+    unsigned char atk_EV;
+    unsigned char def_EV;
+    unsigned char spa_EV;
+    unsigned char HP_EV;
+    unsigned char spd_EV;
+    unsigned char spe_EV;
     move* move1;
     move* move2;
     move* move3;

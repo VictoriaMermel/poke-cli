@@ -19,17 +19,28 @@
 #include <stdbool.h>
 
 
-struct stats demo_stats = {100,50,50,50,50,50};
+void create_pokemon(pokemon* pool, species* species, int level, move* m1, ability ability, int i, char IVs[6], unsigned char EVs[6]) {
 
-void create_pokemon(pokemon* pool, species* species, int level, move* m1, ability ability, int i) {
+    int hp = HP_calc(IVs[0], EVs[0], species->HP, level);
+    int atk = stat_calc(IVs[1], EVs[1], species->Attack, level);
+    int def = stat_calc(IVs[2], EVs[2], species->Defense, level);
+    int spa = stat_calc(IVs[3], EVs[3], species->Sp_Atk, level);
+    int spd = stat_calc(IVs[4], EVs[4], species->Sp_Def, level);
+    int spe = stat_calc(IVs[5], EVs[5], species->Speed, level);
+
 
     pokemon pokemon = {
     .species = species,
-    .stats = &demo_stats,
-    .level = 50,
+    .level = level,
     .move1 = m1,
     .player = false,
     .ability = ability,
+    .HP = hp,
+    .Attack = atk,
+    .Defense = def,
+    .Sp_Atk = spa,
+    .Sp_Def = spd,
+    .Speed = spe,
 };
     strcpy(pokemon.nickname, species->name);
     memcpy(pool+(sizeof(pokemon)*i), &pokemon, sizeof(pokemon));
@@ -39,18 +50,21 @@ pokemon* initialize_pool(int level) {
 
     pokemon* pool = malloc(sizeof(pokemon)*15);
 
-    create_pokemon(pool, &venusaur, level, &tackle, OVERGROW, 0);
-    create_pokemon(pool, &gengar, level, &dbg, CURSED_BODY, 1);
-    create_pokemon(pool, &blastoise, level, &tackle, OVERGROW, 2);
-    create_pokemon(pool, &kingler, level, &tackle, SHELL_ARMOR, 3);
-    create_pokemon(pool, &hypno, level, &tackle, INSOMNIA, 4);
-    create_pokemon(pool, &alakazam, level, &tackle, SYNCRONIZE, 5);
-    create_pokemon(pool, &slowbro, level, &tackle, OWN_TEMPO, 6);
-    create_pokemon(pool, &rapidash, level, &tackle, FLASH_FIRE, 7);
-    create_pokemon(pool, &golem, level, &tackle, STURDY, 8);
-    create_pokemon(pool, &tentacruel, level, &tackle, CLEAR_BODY, 9);
-    create_pokemon(pool, &machamp, level, &tackle, GUTS, 10);
-    create_pokemon(pool, &primeape, level, &tackle, VITAL_SPIRIT, 11);
+    char demoIVs[6] = {21,30,12,7,3,19};
+    unsigned char demoEVs[6] = {255,0,4,0,0,255};
+
+    create_pokemon(pool, &venusaur, level, &tackle, OVERGROW, 0, demoIVs, demoEVs);
+    create_pokemon(pool, &gengar, level, &dbg, CURSED_BODY, 1, demoIVs, demoEVs);
+    create_pokemon(pool, &blastoise, level, &tackle, OVERGROW, 2, demoIVs, demoEVs);
+    create_pokemon(pool, &kingler, level, &tackle, SHELL_ARMOR, 3, demoIVs, demoEVs);
+    create_pokemon(pool, &hypno, level, &tackle, INSOMNIA, 4, demoIVs, demoEVs);
+    create_pokemon(pool, &alakazam, level, &tackle, SYNCRONIZE, 5, demoIVs, demoEVs);
+    create_pokemon(pool, &slowbro, level, &tackle, OWN_TEMPO, 6, demoIVs, demoEVs);
+    create_pokemon(pool, &rapidash, level, &tackle, FLASH_FIRE, 7, demoIVs, demoEVs);
+    create_pokemon(pool, &golem, level, &tackle, STURDY, 8, demoIVs, demoEVs);
+    create_pokemon(pool, &tentacruel, level, &tackle, CLEAR_BODY, 9, demoIVs, demoEVs);
+    create_pokemon(pool, &machamp, level, &tackle, GUTS, 10, demoIVs, demoEVs);
+    create_pokemon(pool, &primeape, level, &tackle, VITAL_SPIRIT, 11, demoIVs, demoEVs);
 
     return pool;
 }
@@ -203,12 +217,12 @@ confirmation_prompt:
         offers[7]->status = state.opponent_pokemon2;
         offers[8]->status = state.opponent_pokemon3;
 
-        state.player_pokemon1->health = team[0]->stats->HP;
-        state.opponent_pokemon1->health = offers[6]->stats->HP;
-        state.player_pokemon2->health = team[1]->stats->HP;
-        state.opponent_pokemon2->health = offers[7]->stats->HP;
-        state.player_pokemon3->health = team[2]->stats->HP;
-        state.opponent_pokemon3->health = offers[8]->stats->HP;
+        state.player_pokemon1->health = team[0]->HP;
+        state.opponent_pokemon1->health = offers[6]->HP;
+        state.player_pokemon2->health = team[1]->HP;
+        state.opponent_pokemon2->health = offers[7]->HP;
+        state.player_pokemon3->health = team[2]->HP;
+        state.opponent_pokemon3->health = offers[8]->HP;
         state.player_pokemon1-> fainted = false;
         state.player_pokemon2-> fainted = false;
         state.player_pokemon3-> fainted = false;

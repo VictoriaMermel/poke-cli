@@ -106,12 +106,12 @@ void make_generic_move(struct battle_state* state, move* move, bool player) {
     mon_type pokemon_types[2] = {attacker->species->type1, attacker->species->type2};
     mon_type def_type[2] = {defender->species->type1, defender->species->type2};
     if(move->category == PHYSICAL) {
-        atk = attacker->stats->Attack * get_Effective_stat(attacker->status->atk_stage);
-        def = defender->stats->Defense * get_Effective_stat(attacker->status->def_stage);
+        atk = attacker->Attack * get_Effective_stat(attacker->status->atk_stage);
+        def = defender->Defense * get_Effective_stat(attacker->status->def_stage);
     }
     else {
-        atk = attacker->stats->Sp_Atk * get_Effective_stat(attacker->status->spa_stage);
-        def = defender->stats->Sp_Def * get_Effective_stat(attacker->status->spd_stage);
+        atk = attacker->Sp_Atk * get_Effective_stat(attacker->status->spa_stage);
+        def = defender->Sp_Def * get_Effective_stat(attacker->status->spd_stage);
     }
 
     stat_change(attacker, &attacker->status->atk_stage, move->atk_change, "Attack");
@@ -133,7 +133,7 @@ void make_generic_move(struct battle_state* state, move* move, bool player) {
         if( attacker_ability == OVERGROW || attacker_ability == BLAZE || attacker_ability == SWARM || attacker_ability == TORRENT ) {
             overgrow_like(move, attacker, &atk);
         }
-        damage = damageCalc(attacker->level, move->Power, atk, defender->stats->Defense, false, move->type,
+        damage = damageCalc(attacker->level, move->Power, atk, defender->Defense, false, move->type,
                         pokemon_types, def_type);
 
         print_effectiveness(defender);

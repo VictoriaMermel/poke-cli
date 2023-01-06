@@ -73,8 +73,8 @@ struct battle_state initialize(pokemon* player, pokemon* opponent) {
     opponent->status = state.opponent_pokemon1;
     state.opponent_pokemon1->pokemon = opponent;
 
-    state.player_pokemon1->health = player->stats->HP;
-    state.opponent_pokemon1->health = opponent->stats->HP;
+    state.player_pokemon1->health = player->HP;
+    state.opponent_pokemon1->health = opponent->HP;
     state.player_pokemon1-> fainted = false;
     state.opponent_pokemon1 -> fainted = false;
 
@@ -97,15 +97,17 @@ struct battle_state initialize(pokemon* player, pokemon* opponent) {
 
 void demo() {
 
-    struct stats bulba_stats = { 105, 48, 48, 63, 63, 45 };
-    struct stats turters_stats = { 104, 47, 63, 49, 62, 43 };
-
     pokemon bulba = {
     .nickname = "Bulba",
     .level = 50,
     .player = true,
-    .stats = &bulba_stats,
     .ability = OVERGROW,
+    .HP = 105,
+    .Attack = 48,
+    .Defense = 48,
+    .Sp_Atk = 63,
+    .Sp_Def = 63,
+    .Speed = 45,
     .move1 = &tackle,
     .move2 = &growl,
     .move3 = &dbg,
@@ -116,7 +118,12 @@ void demo() {
     .nickname = "Turters",
     .level = 50,
     .player = false,
-    .stats = &turters_stats,
+    .HP = 104,
+    .Attack = 47,
+    .Defense = 63,
+    .Sp_Atk = 49,
+    .Sp_Def = 62,
+    .Speed = 43,
     .ability = TORRENT,
     .move1 = &splash,
     .move2 = &tail_whip,

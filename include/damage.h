@@ -20,5 +20,7 @@ mon_type atk_type, mon_type pokemon_type[2], mon_type def_type[2]);
 void print_crit(void);
 
 int random_num(unsigned int lowest, unsigned int highest);
+int stat_calc(char IV, unsigned char EV, int base, int level);
+int HP_calc(char IV, unsigned char EV, int base, int level);
 
 #endif // DAMAGE_H_

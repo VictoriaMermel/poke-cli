@@ -34,7 +34,7 @@ bool swarm( pokemon* pokemon, move* move ) {
 
 void overgrow_like( move* move, pokemon* pokemon, unsigned short* atk ) {
 
-    if ( (blaze(pokemon, move) || overgrow(pokemon, move) || swarm(pokemon, move) || torrent(pokemon, move)) && pokemon->status->health < (pokemon->stats->HP / 3) ) {
+    if ( (blaze(pokemon, move) || overgrow(pokemon, move) || swarm(pokemon, move) || torrent(pokemon, move)) && pokemon->status->health < (pokemon->HP / 3) ) {
         *atk = *atk + (*atk/2);
     }
 }
