@@ -1,5 +1,7 @@
 #+title: PokéCLI
 #+author: Victoria Mermel
+#+options: toc:nil
+#+options: num:nil
 
 ** Command-line Pokémon Battle for Windows(?) and *nix.
 
