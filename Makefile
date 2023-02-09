@@ -52,8 +52,8 @@ build/pool.o: frontier/pool.c
 	@echo "pool.o"
 
 clean:
-	@rm build/*.o
-	@rm poke-cli.bin
+	@rm -f build/*.o
+	@rm -f poke-cli.bin
 
 install: poke-cli.bin
 	@sudo cp poke-cli.bin /usr/local/bin/poke-cli
