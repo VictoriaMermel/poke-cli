@@ -56,9 +56,9 @@ clean:
 	@rm -f poke-cli.bin
 
 install: poke-cli.bin
-	@sudo cp poke-cli.bin /usr/local/bin/poke-cli
+	@cp poke-cli.bin /usr/local/bin/poke-cli
 
 uninstall:
-	@sudo rm /usr/local/bin/poke-cli
+	@rm /usr/local/bin/poke-cli
 
 # end
