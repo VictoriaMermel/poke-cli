@@ -6,7 +6,10 @@
 
 CFLAGS=-Iinclude -D DEBUG -D POSIX -D SILENCE_DISCLAIMER -g
 
-all: poke-cli.bin
+all: build poke-cli.bin
+
+build:
+	@mkdir build
 
 poke-cli.bin: build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o build/frontier.o build/battle.o
 	@gcc $(CFLAGS) -o poke-cli.bin build/main.o build/damage.o build/moves.o build/types.o build/dex.o build/ai.o build/ability.o build/frontier.o build/battle.o
@@ -54,6 +57,7 @@ build/pool.o: frontier/pool.c
 clean:
 	@rm -f build/*.o
 	@rm -f poke-cli.bin
+	@rmdir build
 
 install: poke-cli.bin
 	@cp poke-cli.bin /usr/local/bin/poke-cli

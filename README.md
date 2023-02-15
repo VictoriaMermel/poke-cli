@@ -2,11 +2,7 @@
 
 Command-line Pokémon Battle for Windows(?) and \*nix.
 
-
-## Build
-
-    mkdir build && make
-
+To build, run 'make'
 
 ## Resources
 
